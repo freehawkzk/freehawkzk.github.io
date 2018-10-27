@@ -1,226 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
+extends base
 
-  
-  <title>【UE4源代码分析】-002 UE4中的配置文件 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1、UE4配置文件类型&amp;emsp;UE4中，大量使用的配置文件类型并不是xml与json等新兴配置文件类型，而是使用相对古老的ini配置文件。&amp;emsp;在UE4的目录中，专门有Config目录用于存放使用的ini配置文件。 2、配置文件的类型&amp;emsp;在Config目录下有很多各种各样的配置文件，各个配置文件基本上代表的是一类配置。通过查看\Engine\Source\Runtime\Core">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【UE4源代码分析】-002 UE4中的配置文件">
-<meta property="og:url" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-002 UE4中的配置文件/【UE4源代码分析】-002 UE4中的配置文件/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1、UE4配置文件类型&amp;emsp;UE4中，大量使用的配置文件类型并不是xml与json等新兴配置文件类型，而是使用相对古老的ini配置文件。&amp;emsp;在UE4的目录中，专门有Config目录用于存放使用的ini配置文件。 2、配置文件的类型&amp;emsp;在Config目录下有很多各种各样的配置文件，各个配置文件基本上代表的是一类配置。通过查看\Engine\Source\Runtime\Core">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-002%20UE4中的配置文件/【UE4源代码分析】-002%20UE4中的配置文件/002-01配置文件系统结构.png">
-<meta property="og:updated_time" content="2018-10-27T16:34:27.844Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【UE4源代码分析】-002 UE4中的配置文件">
-<meta name="twitter:description" content="1、UE4配置文件类型&amp;emsp;UE4中，大量使用的配置文件类型并不是xml与json等新兴配置文件类型，而是使用相对古老的ini配置文件。&amp;emsp;在UE4的目录中，专门有Config目录用于存放使用的ini配置文件。 2、配置文件的类型&amp;emsp;在Config目录下有很多各种各样的配置文件，各个配置文件基本上代表的是一类配置。通过查看\Engine\Source\Runtime\Core">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-002%20UE4中的配置文件/【UE4源代码分析】-002%20UE4中的配置文件/002-01配置文件系统结构.png">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-UE4源代码分析/【UE4源代码分析】-002 UE4中的配置文件/【UE4源代码分析】-002 UE4中的配置文件" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-002 UE4中的配置文件/【UE4源代码分析】-002 UE4中的配置文件/" class="article-date">
-  <time datetime="2018-10-27T16:34:35.000Z" itemprop="datePublished">2018-10-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      【UE4源代码分析】-002 UE4中的配置文件
-    </h1>
-  
+block title
+  title= page.title + ' | ' + config.title
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1、UE4配置文件类型"><a href="#1、UE4配置文件类型" class="headerlink" title="1、UE4配置文件类型"></a>1、UE4配置文件类型</h2><p>&emsp;UE4中，大量使用的配置文件类型并不是xml与json等新兴配置文件类型，而是使用相对古老的ini配置文件。<br>&emsp;在UE4的目录中，专门有Config目录用于存放使用的ini配置文件。</p>
-<h2 id="2、配置文件的类型"><a href="#2、配置文件的类型" class="headerlink" title="2、配置文件的类型"></a>2、配置文件的类型</h2><p>&emsp;在Config目录下有很多各种各样的配置文件，各个配置文件基本上代表的是一类配置。通过查看\Engine\Source\Runtime\Core\Public\Misc\ConfigCacheIni.h文件，可以帮助我们判断各个配置文件的作用。<br>&emsp;在枚举类EConfigFileHierarchy中，对各个ini文件以及各个位置的ini配置文件的用途做了基本说明。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="class"><span class="keyword">class</span> <span class="title">EConfigFileHierarchy</span> :</span> uint8</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Engine/Config/Base.ini</span></span><br><span class="line">	AbsoluteBase = <span class="number">0</span>,</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Engine/Config/*.ini</span></span><br><span class="line">	EngineDirBase,</span><br><span class="line">	<span class="comment">// Engine/Config/Platform/BasePlatform* ini</span></span><br><span class="line">	EngineDir_BasePlatform,</span><br><span class="line">	<span class="comment">// Engine/Config/NotForLicensees/*.ini</span></span><br><span class="line">	EngineDirBase_NotForLicensees,</span><br><span class="line">	<span class="comment">// Engine/Config/NoRedist/*.ini -Not supported at this time.</span></span><br><span class="line">	EngineDirBase_NoRedist,</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Game/Config/*.ini</span></span><br><span class="line">	GameDirDefault,</span><br><span class="line">	<span class="comment">// Game/Config/DedicatedServer*.ini</span></span><br><span class="line">	GameDirDedicatedServer,</span><br><span class="line">	<span class="comment">// Game/Config/NotForLicensees/*.ini</span></span><br><span class="line">	GameDirDefault_NotForLicensees,</span><br><span class="line">	<span class="comment">// Game/Config/NoRedist*.ini</span></span><br><span class="line">	GameDirDefault_NoRedist,</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Engine/Config/PlatformName/PlatformName*.ini</span></span><br><span class="line">	EngineDir_Platform,</span><br><span class="line">	<span class="comment">// Engine/Config/NotForLicensees/PlatformName/PlatformName*.ini</span></span><br><span class="line">	EngineDir_Platform_NotForLicensees,</span><br><span class="line">	<span class="comment">// Engine/Config/NoRedist/PlatformName/PlatformName*.ini</span></span><br><span class="line">	EngineDir_Platform_NoRedist,</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Game/Config/PlatformName/PlatformName*.ini</span></span><br><span class="line">	GameDir_Platform,</span><br><span class="line">	<span class="comment">// Game/Config/NotForLicensees/PlatformName/PlatformName*.ini</span></span><br><span class="line">	GameDir_Platform_NotForLicensees,</span><br><span class="line">	<span class="comment">// Game/Config/NoRedist/PlatformName/PlatformName*.ini</span></span><br><span class="line">	GameDir_Platform_NoRedist,</span><br><span class="line"></span><br><span class="line">	<span class="comment">// &lt;UserSettingsDir|AppData&gt;/Unreal Engine/Engine/Config/User*.ini</span></span><br><span class="line">	UserSettingsDir_EngineDir_User,</span><br><span class="line">	<span class="comment">// &lt;UserDir|Documents&gt;/Unreal Engine/Engine/Config/User*.ini</span></span><br><span class="line">	UserDir_User,</span><br><span class="line">	<span class="comment">// Game/Config/User*.ini</span></span><br><span class="line">	GameDir_User,</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Number of config files in hierarchy.</span></span><br><span class="line">	NumHierarchyFiles,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<h2 id="3、ini文件的加载和解析"><a href="#3、ini文件的加载和解析" class="headerlink" title="3、ini文件的加载和解析"></a>3、ini文件的加载和解析</h2><p>&emsp;UE4中，使用类FConfigCacheIni来加载和管理系统中所使用的所有ini文件，可以通过该类来读取和设置ini文件中相应键值对。</p>
-<h3 id="3-1-FConfigCacheIni-配置文件系统"><a href="#3-1-FConfigCacheIni-配置文件系统" class="headerlink" title="3.1 FConfigCacheIni-配置文件系统"></a>3.1 FConfigCacheIni-配置文件系统</h3><p>&emsp;首先，我们来看一下FConfigCacheIni类的定义。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Set of all cached config files.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CORE_API</span> <span class="title">FConfigCacheIni</span> :</span> <span class="keyword">public</span> TMap&lt;FString,FConfigFile&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//接口函数已经省略，请自行查看代码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="comment">/** true if file operations should not be performed */</span></span><br><span class="line">	<span class="keyword">bool</span> bAreFileOperationsDisabled;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** true after the base .ini files have been loaded, and GConfig is generally "ready for use" */</span></span><br><span class="line">	<span class="keyword">bool</span> bIsReadyForUse;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/** The type of the cache (basically, do we call Flush in the destructor) */</span></span><br><span class="line">	EConfigCacheType Type;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;可以看出,FConfigCacheIni实际上是由一组文件名-配置文件FConfigFile组成的Map加上表征配置文件系统状态和类型的变量bool bAreFileOperationsDisabled、bool bIsReadyForUse、EConfigCacheType Type组成的。<br>&emsp;FConfigCacheIni类的访问具体键值的接口型如：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> SetInt<span class="comment">//设置整型数值，通过指定ini文件、指定区段、指定键名称，设置该键为int值</span></span><br><span class="line">(</span><br><span class="line">	<span class="keyword">const</span> TCHAR*		Section,<span class="comment">//区段名</span></span><br><span class="line">	<span class="keyword">const</span> TCHAR*		Key,<span class="comment">//键名</span></span><br><span class="line">	int32					Value,<span class="comment">//值</span></span><br><span class="line">	<span class="keyword">const</span> FString&amp;	Filename<span class="comment">//ini文件名</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">bool</span> GetInt<span class="comment">//通过ini文件名，区段名，键名称获取该键对应的int值</span></span><br><span class="line">(</span><br><span class="line">	<span class="keyword">const</span> TCHAR*		Section,<span class="comment">//区段名</span></span><br><span class="line">	<span class="keyword">const</span> TCHAR*		Key,<span class="comment">//键名</span></span><br><span class="line">	int32&amp;				Value,<span class="comment">//输出int值</span></span><br><span class="line">	<span class="keyword">const</span> FString&amp;	Filename<span class="comment">//ini文件名</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;TConfigCacheIni类还有几个特殊的静态成员函数，用于执行整个配置文件缓存系统的初始化和配置文件的加载工作。<br>&emsp;例如，在static void InitializeConfigSystem()中，完成了全局变量FConfigCacheIni*                GConfig                        = nullptr所指向对象的创建和赋值工作。之后调用LoadGlobalIniFile、LoadExternalIniFile、LoadLocalIniFile、LoadConsoleVariablesFromINI进行ini文件的加载。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Static helper functions</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">InitializeConfigSystem</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">LoadGlobalIniFile</span><span class="params">(FString&amp; FinalIniFilename, <span class="keyword">const</span> TCHAR* BaseIniName, <span class="keyword">const</span> TCHAR* Platform=<span class="literal">NULL</span>, <span class="keyword">bool</span> bForceReload=<span class="literal">false</span>, <span class="keyword">bool</span> bRequireDefaultIni=<span class="literal">false</span>, <span class="keyword">bool</span> bAllowGeneratedIniWhenCooked=<span class="literal">true</span>, <span class="keyword">const</span> TCHAR* GeneratedConfigDir = *FPaths::GeneratedConfigDir())</span></span>;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">LoadLocalIniFile</span><span class="params">(FConfigFile&amp; ConfigFile, <span class="keyword">const</span> TCHAR* IniName, <span class="keyword">bool</span> bIsBaseIniName, <span class="keyword">const</span> TCHAR* Platform=<span class="literal">NULL</span>, <span class="keyword">bool</span> bForceReload=<span class="literal">false</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">LoadExternalIniFile</span><span class="params">(FConfigFile&amp; ConfigFile, <span class="keyword">const</span> TCHAR* IniName, <span class="keyword">const</span> TCHAR* EngineConfigDir, <span class="keyword">const</span> TCHAR* SourceConfigDir, <span class="keyword">bool</span> bIsBaseIniName, <span class="keyword">const</span> TCHAR* Platform=<span class="literal">NULL</span>, <span class="keyword">bool</span> bForceReload=<span class="literal">false</span>, <span class="keyword">bool</span> bWriteDestIni=<span class="literal">false</span>, <span class="keyword">bool</span> bAllowGeneratedIniWhenCooked = <span class="literal">true</span>, <span class="keyword">const</span> TCHAR* GeneratedConfigDir = *FPaths::GeneratedConfigDir())</span></span>;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">LoadConsoleVariablesFromINI</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-2-FConfigFile-配置文件"><a href="#3-2-FConfigFile-配置文件" class="headerlink" title="3.2 FConfigFile-配置文件"></a>3.2 FConfigFile-配置文件</h3><p>&emsp;FConfigFile类用于表示一个ini配置文件。一个ini配置文件可以有多个区段组成，每个区段有自己的名称，因此，一个配置文件至少包含一个名称-区段的映射表。同时，一个配置文件还具有自己的文件名，配置文件类型的属性。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// One config file.</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FConfigFile</span> :</span> <span class="keyword">public</span> TMap&lt;FString,FConfigSection&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">bool</span> Dirty, NoSave;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** The name of this config file */</span>	</span><br><span class="line">	FName Name;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// The collection of source files which were used to generate this file.</span></span><br><span class="line">	FConfigFileHierarchy SourceIniHierarchy;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** The untainted config file which contains the coalesced base/default options. I.e. No Saved/ options*/</span></span><br><span class="line">	FConfigFile* SourceConfigFile;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** Key to the cache to speed up ini parsing */</span></span><br><span class="line">	FString CacheKey;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> ALLOW_INI_OVERRIDE_FROM_COMMANDLINE</span></span><br><span class="line">	<span class="comment">/** The collection of overrides which stemmed from the commandline */</span></span><br><span class="line">	TArray&lt;FConfigCommandlineOverride&gt; CommandlineOptions;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// ALLOW_INI_OVERRIDE_FROM_COMMANDLINE</span></span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>&emsp;通过一个配置文件对象，可以对该对象所表示的配置文件中的值进行读取和写入。读取和写入函数型如：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CORE_API <span class="keyword">void</span> <span class="title">SetString</span><span class="params">( <span class="keyword">const</span> TCHAR* Section, <span class="keyword">const</span> TCHAR* Key, <span class="keyword">const</span> TCHAR* Value )</span></span>;</span><br><span class="line"><span class="function">CORE_API <span class="keyword">bool</span> <span class="title">GetString</span><span class="params">( <span class="keyword">const</span> TCHAR* Section, <span class="keyword">const</span> TCHAR* Key, FString&amp; Value )</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;与上节中FConfigCacheIni类的接口不同的是，FConfigFile类的接口不在需要指定ini文件名。</p>
-<h3 id="3-3-FConfigSection-ini文件中的区段"><a href="#3-3-FConfigSection-ini文件中的区段" class="headerlink" title="3.3 FConfigSection-ini文件中的区段"></a>3.3 FConfigSection-ini文件中的区段</h3><p>&emsp;一个ini文件的区段，是由一组或多组键值对组成的，所以从FConfigSection类是一个由键名称-值组成的映射表。注意它的MultiFind成员函数，从它的实现我们可以看出，UE4的配置文件中，是支持在同一个区段中，一个键的名称对应多个不同的值的，也就是说存在1-N的映射关系。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> TMultiMap&lt;FName,FConfigValue&gt; FConfigSectionMap;</span><br><span class="line"></span><br><span class="line"><span class="comment">// One section in a config file.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FConfigSection</span> :</span> <span class="keyword">public</span> FConfigSectionMap</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	* Check whether the input string is surrounded by quotes</span></span><br><span class="line"><span class="comment">	*</span></span><br><span class="line"><span class="comment">	* @param Test The string to check</span></span><br><span class="line"><span class="comment">	*</span></span><br><span class="line"><span class="comment">	* @return true if the input string is surrounded by quotes</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">HasQuotes</span><span class="params">( <span class="keyword">const</span> FString&amp; Test )</span></span>;</span><br><span class="line">	<span class="keyword">bool</span> <span class="keyword">operator</span>==( <span class="keyword">const</span> FConfigSection&amp; Other ) <span class="keyword">const</span>;</span><br><span class="line">	<span class="keyword">bool</span> <span class="keyword">operator</span>!=( <span class="keyword">const</span> FConfigSection&amp; Other ) <span class="keyword">const</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// process the '+' and '.' commands, takingf into account ArrayOfStruct unique keys</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> CORE_API <span class="title">HandleAddCommand</span><span class="params">(FName Key, <span class="keyword">const</span> FString&amp; Value, <span class="keyword">bool</span> bAppendValueIfNotArrayOfStructsKeyUsed)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Allocator&gt; </span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">MultiFind</span><span class="params">(<span class="keyword">const</span> FName Key, TArray&lt;FConfigValue, Allocator&gt;&amp; OutValues, <span class="keyword">const</span> <span class="keyword">bool</span> bMaintainOrder = <span class="literal">false</span>)</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		FConfigSectionMap::MultiFind(Key, OutValues, bMaintainOrder);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Allocator&gt; </span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">MultiFind</span><span class="params">(<span class="keyword">const</span> FName Key, TArray&lt;FString, Allocator&gt;&amp; OutValues, <span class="keyword">const</span> <span class="keyword">bool</span> bMaintainOrder = <span class="literal">false</span>)</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">const</span> TPair&lt;FName, FConfigValue&gt;&amp; Pair : Pairs)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (Pair.Key == Key)</span><br><span class="line">			&#123;</span><br><span class="line">				OutValues.Add(Pair.Value.GetValue());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (bMaintainOrder)</span><br><span class="line">		&#123;</span><br><span class="line">			Algo::Reverse(OutValues);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// look for "array of struct" keys for overwriting single entries of an array</span></span><br><span class="line">	TMap&lt;FName, FString&gt; ArrayOfStructKeys;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-4-FConfigValue-配置的值"><a href="#3-4-FConfigValue-配置的值" class="headerlink" title="3.4 FConfigValue-配置的值"></a>3.4 FConfigValue-配置的值</h3><p>&emsp;UE4配置文件系统FConfigCacheIni由多个FConfigFile组成，FConfigFile有多个FConfigSection组成，FConfigSection则由多个FConfigValue组成。FConfigValue是保存配置文件值的字面值的地方，也就意味着，在整个UE4的配置文件系统中，将所有从配置文件中读取的值都保存成了字符串，在需要使用的时候再通过相应的接口转变成所需要的类型，比如int等类型。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">FConfigValue</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Returns the ini setting with any macros expanded out</span></span><br><span class="line">	<span class="function"><span class="keyword">const</span> FString&amp; <span class="title">GetValue</span><span class="params">()</span> <span class="keyword">const</span> </span></span><br><span class="line"><span class="function">	</span>&#123; </span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> WITH_EDITOR</span></span><br><span class="line">		bRead = <span class="literal">true</span>; </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">		<span class="keyword">return</span> (ExpandedValue.Len() &gt; <span class="number">0</span> ? ExpandedValue : SavedValue); </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Returns the original ini setting without macro expansion</span></span><br><span class="line">	<span class="function"><span class="keyword">const</span> FString&amp; <span class="title">GetSavedValue</span><span class="params">()</span> <span class="keyword">const</span> </span></span><br><span class="line"><span class="function">	</span>&#123; </span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> WITH_EDITOR</span></span><br><span class="line">		bRead = <span class="literal">true</span>; </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">		<span class="keyword">return</span> SavedValue; </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="comment">/** Internal version of ExpandValue that expands SavedValue into ExpandedValue, or produces an empty ExpandedValue if no expansion occurred. */</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">ExpandValueInternal</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!ExpandValue(SavedValue, ExpandedValue))</span><br><span class="line">		&#123;</span><br><span class="line">			ExpandedValue.Empty();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	FString SavedValue;</span><br><span class="line">	FString ExpandedValue;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> WITH_EDITOR</span></span><br><span class="line">	<span class="keyword">mutable</span> <span class="keyword">bool</span> bRead; <span class="comment">// has this value been read since the config system started</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;从中可以看出，FConfigValue保存的是FString类型的字符串。</p>
-<h2 id="4、UE4配置系统结构图"><a href="#4、UE4配置系统结构图" class="headerlink" title="4、UE4配置系统结构图"></a>4、UE4配置系统结构图</h2><p><img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-002 UE4中的配置文件/【UE4源代码分析】-002 UE4中的配置文件/002-01配置文件系统结构.png" alt="image"></p>
+block content
+  .post
+    h1.post-title= page.title
+    .post-meta= page.date.format('ll')
+      if page.categories.length > 0
+        span= ' | '
+        span.category
+          for category in page.categories.toArray()
+            a(href=url_for(category.path))= category.name
+      if theme.busuanzi == true
+        script(src='https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js', async)
+        span#busuanzi_container_page_pv= ' | '
+          span#busuanzi_value_page_pv
+          span= ' ' + __('Hits')
+      if theme.wordcount == true
+        include _partial/wordcount.pug
+    if theme.disqus
+      a.disqus-comment-count(data-disqus-identifier=page.path, href=url_for(page.path) + '#disqus_thread')
+    if theme.changyan
+      a.ds-thread-count(href=url_for(page.path) + '#SOHUCS')
+        span#changyan_count_unit(style='font-size: 15px; color: #6E7173;') 0
+        span= ' ' + __('Comment')
+      script(src='https://assets.changyan.sohu.com/upload/plugins/plugins.count.js', async)
+    if theme.valine.enable
+      a.disqus-comment-count( href=url_for(page.path) + '#vcomment')
+        span.valine-comment-count(data-xid=url_for(page.path))
+        span= ' ' + __('Comment')
+    if page.toc
+      div(class='clear')
+        div(id='toc' class='toc-article')
+          div(class='toc-title')= __('contents')
+          != toc(page.content, {list_number: theme.toc_number})
+    .post-content
+      != page.content
+    if theme.donate.enable == true
+      iframe(src='/donate/?AliPayQR=' + theme.donate.alipay_qr + '&WeChatQR=' + theme.donate.wechat_qr + '&GitHub=' + theme.donate.github + '&BTCQR=' + theme.donate.btc_qr + '&BTCKEY='+ theme.donate.btc_key + '&PayPal=' + theme.donate.paypal_url, style='overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;', frameborder='0', scrolling='no')
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-002 UE4中的配置文件/【UE4源代码分析】-002 UE4中的配置文件/" data-id="cjnroz8p200056l9sq3uo3s5x" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-005 Editor的起点-Main函数/【UE4源代码分析】-005 Editor的起点-Main函数/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          【UE4源代码分析】-005 Editor的起点-Main函数
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-004 读写锁/【UE4源代码分析】-004 读写锁/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">【UE4源代码分析】-004 读写锁</div>
-    </a>
-  
-</nav>
+    if theme.post_copyright.enable == true
+      div
+        ul.post-copyright
+          li.post-copyright-author
+            strong= __('copyright_author_prefix')
+            = theme.post_copyright.author
+          li.post-copyright-link
+            strong= __('copyright_link_prefix')
+            a(href='/' + page.path)= page.permalink
+          li.post-copyright-license
+            strong= __('copyright_declare_prefix')
+            if theme.post_copyright.copyright_text
+              != theme.post_copyright.copyright_text
+            else
+              != __('copyright_default_text')
+      br
 
-  
-</article>
+    if theme.shareto == true
+      script(type='text/javascript', src=url_for(theme.js) + '/share.js' + '?v=' + theme.version, async)
+      a.article-share-link(data-url=page.permalink, data-id=page._id, data-qrcode=qrcode(page.permalink))= __('shareto')
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
+    include _partial/tag.pug
+    include _partial/post_nav.pug
 
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/">【UE4源代码分析】-003 临界区</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/">【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-008 从GuardedMain函数开始/【UE4源代码分析】-008 从GuardedMain函数开始/">【UE4源代码分析】-008 从GuardedMain函数开始游戏循环</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-005 Editor的起点-Main函数/【UE4源代码分析】-005 Editor的起点-Main函数/">【UE4源代码分析】-005 Editor的起点-Main函数</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2018 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-
-
-  </div>
-</body>
-</html>
+    if page.comments
+      include _partial/comments.pug

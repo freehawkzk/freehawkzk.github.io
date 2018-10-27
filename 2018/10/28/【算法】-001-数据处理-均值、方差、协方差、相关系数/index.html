@@ -1,215 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
+extends base
 
-  
-  <title>【算法】-001 数据处理-均值、方差、协方差、相关系数 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="&amp;emsp;&amp;emsp;最近在项目中需要对数据进行简单处理，要求计算数据的均值、方差、相关系数等数据关系。 [TOC] 1、 均值&amp;emsp;&amp;emsp;这里数据的均值只的是数据的算术均值(Arithmetic Mean),只所有数据之和再除以数据的个数，反应的是数据集中趋势的一个指标。 &amp;emsp;&amp;emsp;对于$n$个数据的数据集$N$,算数平均值计算公式如下：$$A_n = \frac{a">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【算法】-001 数据处理-均值、方差、协方差、相关系数">
-<meta property="og:url" content="http://yoursite.com/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;最近在项目中需要对数据进行简单处理，要求计算数据的均值、方差、相关系数等数据关系。 [TOC] 1、 均值&amp;emsp;&amp;emsp;这里数据的均值只的是数据的算术均值(Arithmetic Mean),只所有数据之和再除以数据的个数，反应的是数据集中趋势的一个指标。 &amp;emsp;&amp;emsp;对于$n$个数据的数据集$N$,算数平均值计算公式如下：$$A_n = \frac{a">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-27T16:25:18.294Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【算法】-001 数据处理-均值、方差、协方差、相关系数">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp;最近在项目中需要对数据进行简单处理，要求计算数据的均值、方差、相关系数等数据关系。 [TOC] 1、 均值&amp;emsp;&amp;emsp;这里数据的均值只的是数据的算术均值(Arithmetic Mean),只所有数据之和再除以数据的个数，反应的是数据集中趋势的一个指标。 &amp;emsp;&amp;emsp;对于$n$个数据的数据集$N$,算数平均值计算公式如下：$$A_n = \frac{a">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-【算法】-001-数据处理-均值、方差、协方差、相关系数" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/" class="article-date">
-  <time datetime="2018-10-27T16:24:34.000Z" itemprop="datePublished">2018-10-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      【算法】-001 数据处理-均值、方差、协方差、相关系数
-    </h1>
-  
+block title
+  title= page.title + ' | ' + config.title
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>&emsp;&emsp;最近在项目中需要对数据进行简单处理，要求计算数据的均值、方差、相关系数等数据关系。</p>
-<p>[TOC]</p>
-<h2 id="1、-均值"><a href="#1、-均值" class="headerlink" title="1、 均值"></a>1、 均值</h2><p>&emsp;&emsp;这里数据的均值只的是数据的算术均值(Arithmetic Mean),只所有数据之和再除以数据的个数，反应的是数据集中趋势的一个指标。</p>
-<p>&emsp;&emsp;对于$n$个数据的数据集$N$,算数平均值计算公式如下：<br>$$<br>A_n = \frac{a_1+a_2+a_3+ \dots + a_{n-1} + a_n}{n}<br>$$</p>
-<p>&emsp;&emsp;C++计算代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">CalculateArithmeticMean</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; vData)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> dMean = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span> (vData.size() == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; vData.size(); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		dMean += vData[i];</span><br><span class="line">	&#125;</span><br><span class="line">	dMean = dMean / vData.size();</span><br><span class="line">	<span class="keyword">return</span> dMean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="2、-方差"><a href="#2、-方差" class="headerlink" title="2、 方差"></a>2、 方差</h2><p>&emsp;&emsp;在统计学与概率论中，方差用于横向数据的集中程度。分为总体方差和样本方差。在统计描述中，方差用来计算每一个变量（观察值）与总体均数之间的差异。为避免出现离均差总和为零，离均差平方和受样本含量的影响，统计学采用平均离均差平方和来描述变量的变异程度。总体方差计算公式：<br>$$<br>\sigma^2 = \frac{\sum{(X-\mu)^2}}{N}<br>$$<br>&emsp;&emsp;$\sigma^2$为总体方差，$X$为样本数据，$\mu$为总体均值，$N$为样本数目。<br>&emsp;&emsp;实际工作中，总体均数难以得到时，应用样本统计量代替总体参数，经校正后，样本方差计算公式：<br>$$<br>S^2=\frac{\sum_{i=1}^{n}{(X_i-\overline{X})^2}}{n-1}<br>$$<br>&emsp;&emsp;其中$S^2$为样本方差，$\overline{X}$为样本均值，$n$为样本例数。<br>&emsp;&emsp;C++计算代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">CalculateVariance</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; vData)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (vData.size() &lt;= <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> dMean = CalculateArithmeticMean(vData);</span><br><span class="line">	<span class="keyword">double</span> dDiff = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; vData.size(); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		dDiff += (vData[i] - dMean)*(vData[i] - dMean);</span><br><span class="line">	&#125;</span><br><span class="line">	dDiff = dDiff / (vData.size()<span class="number">-1</span>);</span><br><span class="line">	<span class="keyword">return</span> dDiff;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="3、-标准差"><a href="#3、-标准差" class="headerlink" title="3、 标准差"></a>3、 标准差</h2><p>&emsp;&emsp;标准差是方差的平方根。<br>$$<br>S=\sqrt{\frac{\sum_{i=1}^{n}{(X_i-\overline{X})^2}}{n-1}}<br>$$</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">CalculateStandardDeviation</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; vData)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (vData.size() &lt;= <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> dSD = <span class="number">0</span>;</span><br><span class="line">	dSD = CalculateVariance(vData);</span><br><span class="line">	dSD = <span class="built_in">sqrt</span>(dSD);</span><br><span class="line">	<span class="keyword">return</span> dSD;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="4、-协方差"><a href="#4、-协方差" class="headerlink" title="4、 协方差"></a>4、 协方差</h2><p>&emsp;&emsp;协协方差（Covariance）在概率论和统计学中用于衡量两个变量的总体误差。而方差是协方差的一种特殊情况，即当两个变量是相同的情况。<br>&emsp;&emsp;协方差表示的是两个变量的总体的误差，这与只表示一个变量误差的方差不同。 如果两个变量的变化趋势一致，也就是说如果其中一个大于自身的期望值，另外一个也大于自身的期望值，那么两个变量之间的协方差就是正值。 如果两个变量的变化趋势相反，即其中一个大于自身的期望值，另外一个却小于自身的期望值，那么两个变量之间的协方差就是负值。<br>$$<br>cov(X,Y)=\frac{\sum_{i=1}^{n}(X_i-\overline{X})(Y_i-\overline{Y})}{n-1}<br>$$<br>&emsp;&emsp;C++计算方法如下:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CalculateCovariance</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; vX, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; vY,<span class="keyword">double</span>&amp; dCor)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (vX.size() &lt;=<span class="number">1</span> || vY.size() &lt;=<span class="number">1</span> || vX.size() != vY.size())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">double</span> dMeanX = CalculateArithmeticMean(vX);</span><br><span class="line">	<span class="keyword">double</span> dMeanY = CalculateArithmeticMean(vY);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">double</span> dCorvariance = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;vX.size(); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		dCorvariance += ((vX[i] - dMeanX)*(vY[i] - dMeanY));</span><br><span class="line">	&#125;</span><br><span class="line">	dCorvariance /= (vX.size() - <span class="number">1</span>);</span><br><span class="line">	dCor = dCorvariance;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="5、-相关系数"><a href="#5、-相关系数" class="headerlink" title="5、 相关系数"></a>5、 相关系数</h2><p>&emsp;&emsp;相关关系是一种非确定性的关系，相关系数是研究变量之间线性相关程度的量。又叫相关系数或线性相关系数，一般用字母$r$表示，用来度量两个变量间的线性关系。<br>&emsp;&emsp;相关系数的计算公式如下：<br>$$<br>r(X,Y) = \frac{Cov(X,y)}{\sqrt{Var(X)Var(Y)}}<br>$$<br>&emsp;&emsp;其中$Cov(X,Y)$表示数据$X$和$Y$的协方差，$Var(X)$与$Var(Y)$表示数据$X$和$Y$的方差。<br>&emsp;&emsp;C++的实现方式如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CalculateCorrelationCoefficient</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; vX, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; vY, <span class="keyword">double</span>&amp; dCorCoe)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (vX.size() &lt;= <span class="number">1</span> || vY.size() &lt;= <span class="number">1</span> || vX.size() != vY.size())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> dCor = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">bool</span> hr = CalculateCovariance(vX, vY, dCor);</span><br><span class="line">	<span class="keyword">if</span> (!hr)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> dVarianceX = CalculateVariance(vX);</span><br><span class="line">	<span class="keyword">if</span> (dVarianceX == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> dVarianceY = CalculateVariance(vY);</span><br><span class="line">	<span class="keyword">if</span> (dVarianceY == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> dCorrelationCoefficient = <span class="number">0</span>;</span><br><span class="line">	dCorrelationCoefficient = dCor / <span class="built_in">sqrt</span>(dVarianceX*dVarianceY);</span><br><span class="line">	dCorCoe = dCorrelationCoefficient;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+block content
+  .post
+    h1.post-title= page.title
+    .post-meta= page.date.format('ll')
+      if page.categories.length > 0
+        span= ' | '
+        span.category
+          for category in page.categories.toArray()
+            a(href=url_for(category.path))= category.name
+      if theme.busuanzi == true
+        script(src='https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js', async)
+        span#busuanzi_container_page_pv= ' | '
+          span#busuanzi_value_page_pv
+          span= ' ' + __('Hits')
+      if theme.wordcount == true
+        include _partial/wordcount.pug
+    if theme.disqus
+      a.disqus-comment-count(data-disqus-identifier=page.path, href=url_for(page.path) + '#disqus_thread')
+    if theme.changyan
+      a.ds-thread-count(href=url_for(page.path) + '#SOHUCS')
+        span#changyan_count_unit(style='font-size: 15px; color: #6E7173;') 0
+        span= ' ' + __('Comment')
+      script(src='https://assets.changyan.sohu.com/upload/plugins/plugins.count.js', async)
+    if theme.valine.enable
+      a.disqus-comment-count( href=url_for(page.path) + '#vcomment')
+        span.valine-comment-count(data-xid=url_for(page.path))
+        span= ' ' + __('Comment')
+    if page.toc
+      div(class='clear')
+        div(id='toc' class='toc-article')
+          div(class='toc-title')= __('contents')
+          != toc(page.content, {list_number: theme.toc_number})
+    .post-content
+      != page.content
+    if theme.donate.enable == true
+      iframe(src='/donate/?AliPayQR=' + theme.donate.alipay_qr + '&WeChatQR=' + theme.donate.wechat_qr + '&GitHub=' + theme.donate.github + '&BTCQR=' + theme.donate.btc_qr + '&BTCKEY='+ theme.donate.btc_key + '&PayPal=' + theme.donate.paypal_url, style='overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;', frameborder='0', scrolling='no')
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/" data-id="cjnroz8nk00046l9s8ovodvsi" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2018/10/28/【算法】-000-一维多项式求值/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          【算法】-000 一维多项式求值
-        
-      </div>
-    </a>
-  
-  
-</nav>
+    if theme.post_copyright.enable == true
+      div
+        ul.post-copyright
+          li.post-copyright-author
+            strong= __('copyright_author_prefix')
+            = theme.post_copyright.author
+          li.post-copyright-link
+            strong= __('copyright_link_prefix')
+            a(href='/' + page.path)= page.permalink
+          li.post-copyright-license
+            strong= __('copyright_declare_prefix')
+            if theme.post_copyright.copyright_text
+              != theme.post_copyright.copyright_text
+            else
+              != __('copyright_default_text')
+      br
 
-  
-</article>
+    if theme.shareto == true
+      script(type='text/javascript', src=url_for(theme.js) + '/share.js' + '?v=' + theme.version, async)
+      a.article-share-link(data-url=page.permalink, data-id=page._id, data-qrcode=qrcode(page.permalink))= __('shareto')
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
+    include _partial/tag.pug
+    include _partial/post_nav.pug
 
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/">【UE4源代码分析】-003 临界区</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/">【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-008 从GuardedMain函数开始/【UE4源代码分析】-008 从GuardedMain函数开始/">【UE4源代码分析】-008 从GuardedMain函数开始游戏循环</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-005 Editor的起点-Main函数/【UE4源代码分析】-005 Editor的起点-Main函数/">【UE4源代码分析】-005 Editor的起点-Main函数</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2018 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-
-
-  </div>
-</body>
-</html>
+    if page.comments
+      include _partial/comments.pug

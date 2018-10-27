@@ -1,208 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
+extends base
 
-  
-  <title>【UE4源代码分析】-003 临界区 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1、临界区&amp;emsp;&amp;emsp;临界区指的是一个访问共用资源（例如：共用设备或是共用存储器）的程序片段，而这些共用资源又无法同时被多个线程访问的特性。当有线程进入临界区段时，其他线程或是进程必须等待（例如：bounded waiting 等待法），有一些同步的机制必须在临界区段的进入点与离开点实现，以确保这些共用资源是被互斥获得使用。&amp;emsp;&amp;emsp;简单来说，临界区是一种锁，每次只允许一">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【UE4源代码分析】-003 临界区">
-<meta property="og:url" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1、临界区&amp;emsp;&amp;emsp;临界区指的是一个访问共用资源（例如：共用设备或是共用存储器）的程序片段，而这些共用资源又无法同时被多个线程访问的特性。当有线程进入临界区段时，其他线程或是进程必须等待（例如：bounded waiting 等待法），有一些同步的机制必须在临界区段的进入点与离开点实现，以确保这些共用资源是被互斥获得使用。&amp;emsp;&amp;emsp;简单来说，临界区是一种锁，每次只允许一">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-27T16:34:51.818Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【UE4源代码分析】-003 临界区">
-<meta name="twitter:description" content="1、临界区&amp;emsp;&amp;emsp;临界区指的是一个访问共用资源（例如：共用设备或是共用存储器）的程序片段，而这些共用资源又无法同时被多个线程访问的特性。当有线程进入临界区段时，其他线程或是进程必须等待（例如：bounded waiting 等待法），有一些同步的机制必须在临界区段的进入点与离开点实现，以确保这些共用资源是被互斥获得使用。&amp;emsp;&amp;emsp;简单来说，临界区是一种锁，每次只允许一">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/" class="article-date">
-  <time datetime="2018-10-27T16:34:35.000Z" itemprop="datePublished">2018-10-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      【UE4源代码分析】-003 临界区
-    </h1>
-  
+block title
+  title= page.title + ' | ' + config.title
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1、临界区"><a href="#1、临界区" class="headerlink" title="1、临界区"></a>1、临界区</h2><p>&emsp;&emsp;<strong>临界区</strong>指的是一个访问共用资源（例如：共用设备或是共用存储器）的程序片段，而这些共用资源又无法同时被多个线程访问的特性。当有线程进入临界区段时，其他线程或是进程必须等待（例如：bounded waiting 等待法），有一些同步的机制必须在临界区段的进入点与离开点实现，以确保这些共用资源是被互斥获得使用。<br>&emsp;&emsp;简单来说，临界区是一种锁，每次只允许一把钥匙对锁进行加锁操作。程序在使用临界资源之前需要使用自己的钥匙对锁进行加锁操作。加锁操作时，先检查锁是否处于锁定操作，如果处于锁定状态，那么需要等待锁被原加锁者解锁或超时。加锁成功后，程序可以使用临界资源。在使用完成之后需要使用钥匙对资源进行解锁。从而保证，同一时刻只有一个用户能够对临界资源进行访问。<br>&emsp;&emsp;<strong>临界区</strong>实现的是一种<strong>互斥</strong>的保护。</p>
-<h2 id="2、Windows临界区"><a href="#2、Windows临界区" class="headerlink" title="2、Windows临界区"></a>2、Windows临界区</h2><p>&emsp;&esmp;windows提供了一种<strong>CRITICAL_SECTION</strong>结构，并提供相关操作函数来实现相关功能，主要包括：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化临界区</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> WINAPI <span class="title">InitializeCriticalSection</span><span class="params">(LPCRITICAL_SECTION lpCriticalSection)</span></span>;</span><br><span class="line"><span class="comment">//带自旋次数的初始化临界区</span></span><br><span class="line"><span class="function">BOOL WINAPI <span class="title">InitializeCriticalSectionAndSpinCount</span><span class="params">(LPCRITICAL_SECTION lpCriticalSection, DWORD dwSpinCount)</span></span>;</span><br><span class="line"><span class="comment">//设置临界区的自旋次数</span></span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">SetCriticalSectionSpinCount</span><span class="params">(LPCRITICAL_SECTION lpCriticalSection, DWORD dwSpinCount)</span></span>;</span><br><span class="line"><span class="comment">//尝试进入临界区</span></span><br><span class="line"><span class="function">BOOL WINAPI <span class="title">TryEnterCriticalSection</span><span class="params">(LPCRITICAL_SECTION lpCriticalSection)</span></span>;</span><br><span class="line"><span class="comment">//进入临界区</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> WINAPI <span class="title">EnterCriticalSection</span><span class="params">(LPCRITICAL_SECTION lpCriticalSection)</span></span>;</span><br><span class="line"><span class="comment">//离开临界区</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> WINAPI <span class="title">LeaveCriticalSection</span><span class="params">(LPCRITICAL_SECTION lpCriticalSection)</span></span>;</span><br><span class="line"><span class="comment">//删除临界区，释放临界区</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> WINAPI <span class="title">DeleteCriticalSection</span><span class="params">(LPCRITICAL_SECTION lpCriticalSection)</span></span>;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;<strong>CRITICAL_SECTION</strong>并不是windows系统的核心对象，不具备名称。因此，临界区只能用于单个进程的多个线程之间的同步，对于进程之间的通信和同步无能为力。</p>
-<h2 id="3、UE4中的临界区"><a href="#3、UE4中的临界区" class="headerlink" title="3、UE4中的临界区"></a>3、UE4中的临界区</h2><p>&emsp;&emsp;在UE4中，Engine\Source\Runtime\Core\Public\Windows\WindowsCriticalSection.h文件提供了UE4中临界区的定义，主要包括<code>FWindowsCriticalSection</code>和<code>FWindowsSystemWideCriticalSection</code>两种。</p>
-<h3 id="3-1-FWindowsCriticalSection"><a href="#3-1-FWindowsCriticalSection" class="headerlink" title="3.1 FWindowsCriticalSection"></a>3.1 FWindowsCriticalSection</h3><p>&emsp;&emsp;<code>FWindowsCriticalSection</code>是UE4对windows操作系统中<code>CRITICAL_SECTION</code>结构的封装，提供无命名的临界区资源锁以及相关操作功能。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This is the Windows version of a critical section. It uses an aggregate</span></span><br><span class="line"><span class="comment"> * CRITICAL_SECTION to implement its locking.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FWindowsCriticalSection</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="comment">//私有成员，windows普通的CRITICAL_SECTION变量</span></span><br><span class="line">	Windows::CRITICAL_SECTION CriticalSection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">	<span class="comment">//构造函数，自旋次数初始值设置为4000.</span></span><br><span class="line">	<span class="function">FORCEINLINE <span class="title">FWindowsCriticalSection</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		CA_SUPPRESS(<span class="number">28125</span>);</span><br><span class="line">		<span class="comment">//初始化临界区资源</span></span><br><span class="line">		Windows::InitializeCriticalSection(&amp;CriticalSection);</span><br><span class="line">		Windows::SetCriticalSectionSpinCount(&amp;CriticalSection,<span class="number">4000</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//析构函数，释放临界区</span></span><br><span class="line">	FORCEINLINE ~FWindowsCriticalSection()</span><br><span class="line">	&#123;</span><br><span class="line">		Windows::DeleteCriticalSection(&amp;CriticalSection);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//加锁操作，采用先尝试，后进入的流程</span></span><br><span class="line">	<span class="function">FORCEINLINE <span class="keyword">void</span> <span class="title">Lock</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="comment">// Spin first before entering critical section, causing ring-0 transition and context switch.</span></span><br><span class="line">		<span class="keyword">if</span>(Windows::TryEnterCriticalSection(&amp;CriticalSection) == <span class="number">0</span> )</span><br><span class="line">		&#123;</span><br><span class="line">			Windows::EnterCriticalSection(&amp;CriticalSection);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//尝试加锁，当前临界区能够被当前线程加锁，则返回true，否则返回false</span></span><br><span class="line">	<span class="function">FORCEINLINE <span class="keyword">bool</span> <span class="title">TryLock</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (Windows::TryEnterCriticalSection(&amp;CriticalSection))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//解锁</span></span><br><span class="line">	<span class="function">FORCEINLINE <span class="keyword">void</span> <span class="title">Unlock</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		Windows::LeaveCriticalSection(&amp;CriticalSection);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">//确保临界区无法被复制和赋值</span></span><br><span class="line">	FWindowsCriticalSection(<span class="keyword">const</span> FWindowsCriticalSection&amp;);</span><br><span class="line">	FWindowsCriticalSection&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> FWindowsCriticalSection&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;通过将<code>FWindowsCriticalSection::FWindowsCriticalSection(const FWindowsCriticalSection&amp;)</code>和<code>FWindowsCriticalSection&amp; FWindowsCriticalSection::operator=(const FWindowsCriticalSection&amp;)</code>声明为私有函数，从而确保临界区资源锁无法被复制和赋值。</p>
-<h3 id="3-2-FWindowsSystemWideCriticalSection"><a href="#3-2-FWindowsSystemWideCriticalSection" class="headerlink" title="3.2 FWindowsSystemWideCriticalSection"></a>3.2 FWindowsSystemWideCriticalSection</h3><p>&emsp;&emsp;除了无法用于进程间同步的普通临界区之外，UE4还通过Mutex模仿了一个可用于进程间同步的临界区<code>FWindowsSystemWideCriticalSection</code>。<br>&emsp;&emsp;Mutex是互斥器，在windows系统中是系统的核心对象，可以命名，并通过名称获取已经存在的对象实例。基于以上特性，UE4通过Mutex的封装，实现了能够用于进程间线程同步的<code>FWindowsSystemWideCriticalSection</code>，其类定义如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** System-Wide Critical Section for windows using mutex */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CORE_API</span> <span class="title">FWindowsSystemWideCriticalSection</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">//构造函数，创建并尝试获取命名Mutex</span></span><br><span class="line">	<span class="function"><span class="keyword">explicit</span> <span class="title">FWindowsSystemWideCriticalSection</span><span class="params">(<span class="keyword">const</span> class FString&amp; InName, FTimespan InTimeout = FTimespan::Zero())</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//析构函数，如果当前持有锁的话释放锁</span></span><br><span class="line">	~FWindowsSystemWideCriticalSection();</span><br><span class="line"></span><br><span class="line">	<span class="comment">//检查锁当前是否能够获取，如果能够获取或者前一个拥有着在未释放锁的情况下结束了，返回true，否则返回false。</span></span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">IsValid</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//释放锁</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Release</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">//防止锁被拷贝和赋值</span></span><br><span class="line">	FWindowsSystemWideCriticalSection(<span class="keyword">const</span> FWindowsSystemWideCriticalSection&amp;);</span><br><span class="line">	FWindowsSystemWideCriticalSection&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> FWindowsSystemWideCriticalSection&amp;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Windows::HANDLE Mutex;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+block content
+  .post
+    h1.post-title= page.title
+    .post-meta= page.date.format('ll')
+      if page.categories.length > 0
+        span= ' | '
+        span.category
+          for category in page.categories.toArray()
+            a(href=url_for(category.path))= category.name
+      if theme.busuanzi == true
+        script(src='https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js', async)
+        span#busuanzi_container_page_pv= ' | '
+          span#busuanzi_value_page_pv
+          span= ' ' + __('Hits')
+      if theme.wordcount == true
+        include _partial/wordcount.pug
+    if theme.disqus
+      a.disqus-comment-count(data-disqus-identifier=page.path, href=url_for(page.path) + '#disqus_thread')
+    if theme.changyan
+      a.ds-thread-count(href=url_for(page.path) + '#SOHUCS')
+        span#changyan_count_unit(style='font-size: 15px; color: #6E7173;') 0
+        span= ' ' + __('Comment')
+      script(src='https://assets.changyan.sohu.com/upload/plugins/plugins.count.js', async)
+    if theme.valine.enable
+      a.disqus-comment-count( href=url_for(page.path) + '#vcomment')
+        span.valine-comment-count(data-xid=url_for(page.path))
+        span= ' ' + __('Comment')
+    if page.toc
+      div(class='clear')
+        div(id='toc' class='toc-article')
+          div(class='toc-title')= __('contents')
+          != toc(page.content, {list_number: theme.toc_number})
+    .post-content
+      != page.content
+    if theme.donate.enable == true
+      iframe(src='/donate/?AliPayQR=' + theme.donate.alipay_qr + '&WeChatQR=' + theme.donate.wechat_qr + '&GitHub=' + theme.donate.github + '&BTCQR=' + theme.donate.btc_qr + '&BTCKEY='+ theme.donate.btc_key + '&PayPal=' + theme.donate.paypal_url, style='overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;', frameborder='0', scrolling='no')
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/" data-id="cjnroz8p300066l9spx4ro9xe" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-  
-    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作</div>
-    </a>
-  
-</nav>
+    if theme.post_copyright.enable == true
+      div
+        ul.post-copyright
+          li.post-copyright-author
+            strong= __('copyright_author_prefix')
+            = theme.post_copyright.author
+          li.post-copyright-link
+            strong= __('copyright_link_prefix')
+            a(href='/' + page.path)= page.permalink
+          li.post-copyright-license
+            strong= __('copyright_declare_prefix')
+            if theme.post_copyright.copyright_text
+              != theme.post_copyright.copyright_text
+            else
+              != __('copyright_default_text')
+      br
 
-  
-</article>
+    if theme.shareto == true
+      script(type='text/javascript', src=url_for(theme.js) + '/share.js' + '?v=' + theme.version, async)
+      a.article-share-link(data-url=page.permalink, data-id=page._id, data-qrcode=qrcode(page.permalink))= __('shareto')
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
+    include _partial/tag.pug
+    include _partial/post_nav.pug
 
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/">【UE4源代码分析】-003 临界区</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/">【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-008 从GuardedMain函数开始/【UE4源代码分析】-008 从GuardedMain函数开始/">【UE4源代码分析】-008 从GuardedMain函数开始游戏循环</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-005 Editor的起点-Main函数/【UE4源代码分析】-005 Editor的起点-Main函数/">【UE4源代码分析】-005 Editor的起点-Main函数</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2018 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-
-
-  </div>
-</body>
-</html>
+    if page.comments
+      include _partial/comments.pug
