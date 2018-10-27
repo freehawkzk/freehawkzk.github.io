@@ -7,13 +7,17 @@
   
   <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="【算法】-000 一维多项式求值[TOC] 1、一维多项式的定义&amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/10/27/【算法】-000-一维多项式求值/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="【算法】-000 一维多项式求值[TOC] 1、一维多项式的定义&amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-24T02:33:18.904Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="【算法】-000 一维多项式求值[TOC] 1、一维多项式的定义&amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,9 +64,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-【算法】-000-一维多项式求值" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-【算法】-000-一维多项式求值" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/10/27/【算法】-000-一维多项式求值/" class="article-date">
   <time datetime="2018-10-27T15:59:15.459Z" itemprop="datePublished">2018-10-27</time>
@@ -97,101 +99,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/27/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/" class="article-date">
-  <time datetime="2018-10-27T15:35:46.862Z" itemprop="datePublished">2018-10-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16"><a href="#001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16" class="headerlink" title="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16"></a>001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16</h1><p>[TOC]</p>
-<h2 id="1、现象"><a href="#1、现象" class="headerlink" title="1、现象"></a>1、现象</h2><p>&emsp;&emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现<code>error LNK2001 无法解析的外部符号 _WinMain@16</code>错误，链接错误。</p>
-<h2 id="2、解决方法"><a href="#2、解决方法" class="headerlink" title="2、解决方法"></a>2、解决方法</h2><p>&emsp;&emsp; (1) 项目属性-&gt;C/C++-&gt;预处理器，预处理器定义中删除<code>_WINDOWS</code>,添加<code>_CONSOLE</code>;<br>&emsp;&emsp; (2) 项目属性-&gt;链接器-&gt;系统，子系统选项选择为<code>控制台 (/SUBSYSTEM:CONSOLE)</code>;</p>
+  
+    <a href="/2018/10/27/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/27/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/" data-id="cjnrmsd580003q39sd9fuvqwg" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-000-Outlook发送邮件后在发件箱出现两次" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/27/000-Outlook发送邮件后在发件箱出现两次/" class="article-date">
-  <time datetime="2018-10-27T15:26:59.908Z" itemprop="datePublished">2018-10-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="000-Outlook发送邮件后在发件箱出现两次"><a href="#000-Outlook发送邮件后在发件箱出现两次" class="headerlink" title="000-Outlook发送邮件后在发件箱出现两次"></a>000-Outlook发送邮件后在发件箱出现两次</h1><p>[TOC]</p>
-<h2 id="1、现象"><a href="#1、现象" class="headerlink" title="1、现象"></a>1、现象</h2><p>&emsp;&emsp;使用Outlook 2016配置好邮箱账号之后，能够成功收发邮件，但所有的已发送邮件都会在发件箱中出现两次。虽不影响使用，但感官上对强迫症有强烈的杀伤作用！</p>
-<h2 id="2、解决方法"><a href="#2、解决方法" class="headerlink" title="2、解决方法"></a>2、解决方法</h2><p>&emsp;&emsp; Outlook 文件-&gt;选项-&gt;邮件-&gt;保存邮件，将其中的“在已发送邮件文件夹中保留邮件副本”复选框取消勾选，即可。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/27/000-Outlook发送邮件后在发件箱出现两次/" data-id="cjnrmsd500000q39s0ohaayhj" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Ubuntu-notes-md" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/27/Ubuntu-notes-md/" class="article-date">
-  <time datetime="2018-10-27T15:08:07.339Z" itemprop="datePublished">2018-10-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Ubuntu18-04笔记"><a href="#Ubuntu18-04笔记" class="headerlink" title="Ubuntu18.04笔记"></a>Ubuntu18.04笔记</h1><p>[TOC]</p>
-<h2 id="1-将主目录下文件夹名称改成英文名"><a href="#1-将主目录下文件夹名称改成英文名" class="headerlink" title="1 将主目录下文件夹名称改成英文名"></a>1 将主目录下文件夹名称改成英文名</h2><p>&emsp;&emsp;首先修改现有主文件夹下各文件夹名称：</p>
-<p>&emsp;&emsp;Desktop、 Documents、 Download、 Music、 Pictures、 Public、 Templates、 Videos ……</p>
-<p>&emsp;&emsp;然后编辑配置文件：</p>
-<p><code>gedit ~/.config/user-dirs.dirs</code></p>
-<p>&emsp;&emsp;把文件夹指向改掉，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">XDG_DESKTOP_DIR=&quot;$HOME/Desktop&quot;</span><br><span class="line"></span><br><span class="line">XDG_DOWNLOAD_DIR=&quot;$HOME/Download&quot;</span><br><span class="line"></span><br><span class="line">XDG_TEMPLATES_DIR=&quot;$HOME/Templates&quot;</span><br><span class="line"></span><br><span class="line">XDG_PUBLICSHARE_DIR=&quot;$HOME/Public&quot;</span><br><span class="line"></span><br><span class="line">XDG_DOCUMENTS_DIR=&quot;$HOME/Documents&quot;</span><br><span class="line"></span><br><span class="line">XDG_MUSIC_DIR=&quot;$HOME/Music&quot;</span><br><span class="line"></span><br><span class="line">XDG_PICTURES_DIR=&quot;$HOME/Pictures&quot;</span><br><span class="line"></span><br><span class="line">XDG_VIDEOS_DIR=&quot;$HOME/Videos&quot;</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/27/Ubuntu-notes-md/" data-id="cjnrmsd570002q39sq06k1xq2" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
