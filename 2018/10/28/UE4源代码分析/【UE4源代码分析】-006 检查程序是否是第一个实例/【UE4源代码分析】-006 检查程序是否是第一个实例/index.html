@@ -15,9 +15,8 @@
 <meta property="og:description" content="&amp;emsp;&amp;emsp;本文主要结合在工作中遇到的需要保持在一台计算机上只允许一个程序实例运行的需求，结合在阅读UE4源代码的时候关于NamedMutex的一点思考，记录下如果检测程序是否是本计算机上运行的第一个实例的问题。 [TOC] 1、问题的由来&amp;emsp;&amp;emsp;最近在开发过程中，由于软件需要和计算机的数据采集卡硬件打交道，数据采集卡SDK在重复初始化的时候会初始化失败。虽然在初始化失">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-1.PNG">
-<meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-1.PNG">
 <meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-2.PNG">
-<meta property="og:updated_time" content="2018-10-27T16:55:05.310Z">
+<meta property="og:updated_time" content="2018-10-27T17:00:46.879Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【UE4源代码分析】-006 检查程序是否是第一个实例">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文主要结合在工作中遇到的需要保持在一台计算机上只允许一个程序实例运行的需求，结合在阅读UE4源代码的时候关于NamedMutex的一点思考，记录下如果检测程序是否是本计算机上运行的第一个实例的问题。 [TOC] 1、问题的由来&amp;emsp;&amp;emsp;最近在开发过程中，由于软件需要和计算机的数据采集卡硬件打交道，数据采集卡SDK在重复初始化的时候会初始化失败。虽然在初始化失">
@@ -123,7 +122,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CIsFirstRunDlg::OnClose()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 在此添加消息处理程序代码和/或调用默认值</span></span><br><span class="line">	<span class="keyword">if</span> (g_hMutex)</span><br><span class="line">	&#123;</span><br><span class="line">		ReleaseMutex(g_hMutex);</span><br><span class="line">		g_hMutex = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	CDialogEx::OnClose();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>运行效果<br>&emsp;&emsp;程序第一次运行时效果图如下：<br><img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/IsFirstRun-1.PNG"></p>
-<img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-1.PNG" title="IsFirstRun-1">
+
 <p>&emsp;&emsp;程序第二次运行时效果图如下：<br><img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/IsFirstRun-2.PNG"><br>&emsp;&emsp;如果第二次程序尝试启动时，第一次运行的程序已经处于最小化状态，尝试第二次运行程序会将第一次运行程序的主界面显示出来。</p>
 </li>
 </ul>
@@ -133,7 +132,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/" data-id="cjnrolo8w0008ql9s92ns8e52" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/" data-id="cjnroz8p300076l9s0c2c6phg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -142,19 +141,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-004 读写锁/【UE4源代码分析】-004 读写锁/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          【UE4源代码分析】-003 临界区
+          【UE4源代码分析】-004 读写锁
         
       </div>
     </a>
   
   
-    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-005 Editor的起点-Main函数/【UE4源代码分析】-005 Editor的起点-Main函数/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/10/28/Ubuntu-notes-md/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">【UE4源代码分析】-005 Editor的起点-Main函数</div>
+      <div class="article-nav-title">Ubuntu18.04笔记</div>
     </a>
   
 </nav>
@@ -191,15 +190,7 @@
       <ul>
         
           <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-004 读写锁/【UE4源代码分析】-004 读写锁/">【UE4源代码分析】-004 读写锁</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-002 UE4中的配置文件/【UE4源代码分析】-002 UE4中的配置文件/">【UE4源代码分析】-002 UE4中的配置文件</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/">【UE4源代码分析】-003 临界区</a>
           </li>
         
           <li>
@@ -207,7 +198,15 @@
           </li>
         
           <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
+          </li>
+        
+          <li>
             <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-008 从GuardedMain函数开始/【UE4源代码分析】-008 从GuardedMain函数开始/">【UE4源代码分析】-008 从GuardedMain函数开始游戏循环</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-005 Editor的起点-Main函数/【UE4源代码分析】-005 Editor的起点-Main函数/">【UE4源代码分析】-005 Editor的起点-Main函数</a>
           </li>
         
       </ul>

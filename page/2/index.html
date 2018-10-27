@@ -62,6 +62,45 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-【算法】-002 小数四舍五入截断" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/28/【算法】-002 小数四舍五入截断/" class="article-date">
+  <time datetime="2018-10-27T16:24:35.000Z" itemprop="datePublished">2018-10-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/28/【算法】-002 小数四舍五入截断/">【算法】-002 小数四舍五入截断</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;实际应用中，由于采集设备的精度问题，虽然测量值在有效范围内，但可能数据尾部会处在一直跳变的过程中。为了将不稳定的数据位舍去，因此需要将测试数据进行带四舍五入的截断。</p>
+<p>[TOC]</p>
+<h2 id="1、-实现"><a href="#1、-实现" class="headerlink" title="1、 实现"></a>1、 实现</h2><p>&emsp;&emsp;将带小数的测试数据直接进行数据类型转换，使用C++编译器默认的截断规则进行小数截断。比如，要将1.123456保留5位小数，使用C++代码方法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">DecimalTruncation</span><span class="params">(<span class="keyword">float</span> a, <span class="keyword">int</span> nCount)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">float</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//先将数据放大10^nCount倍，将小数点右移nCount位，之后进行整数截断，为了确保四舍五入的进行，将放大后的数据+0.5，</span></span><br><span class="line">	<span class="comment">//截断之后再将结果缩小10^nCount倍，将小数点左移nCount位。</span></span><br><span class="line">	d = (<span class="keyword">int</span>(a * <span class="built_in">pow</span>(<span class="number">10</span>, nCount)+<span class="number">0.5</span>)) / <span class="built_in">pow</span>(<span class="number">10</span>, nCount);</span><br><span class="line">	<span class="keyword">return</span> d;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/28/【算法】-002 小数四舍五入截断/" data-id="cjnroz8nh00036l9swggrlv44" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-【算法】-000-一维多项式求值" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/10/28/【算法】-000-一维多项式求值/" class="article-date">
@@ -101,46 +140,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/28/【算法】-000-一维多项式求值/" data-id="cjnrolo7n0004ql9sufsibkot" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-【算法】-002 小数四舍五入截断" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/28/【算法】-002 小数四舍五入截断/" class="article-date">
-  <time datetime="2018-10-27T16:24:35.000Z" itemprop="datePublished">2018-10-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/28/【算法】-002 小数四舍五入截断/">【算法】-002 小数四舍五入截断</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>&emsp;&emsp;实际应用中，由于采集设备的精度问题，虽然测量值在有效范围内，但可能数据尾部会处在一直跳变的过程中。为了将不稳定的数据位舍去，因此需要将测试数据进行带四舍五入的截断。</p>
-<p>[TOC]</p>
-<h2 id="1、-实现"><a href="#1、-实现" class="headerlink" title="1、 实现"></a>1、 实现</h2><p>&emsp;&emsp;将带小数的测试数据直接进行数据类型转换，使用C++编译器默认的截断规则进行小数截断。比如，要将1.123456保留5位小数，使用C++代码方法如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">DecimalTruncation</span><span class="params">(<span class="keyword">float</span> a, <span class="keyword">int</span> nCount)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">float</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//先将数据放大10^nCount倍，将小数点右移nCount位，之后进行整数截断，为了确保四舍五入的进行，将放大后的数据+0.5，</span></span><br><span class="line">	<span class="comment">//截断之后再将结果缩小10^nCount倍，将小数点左移nCount位。</span></span><br><span class="line">	d = (<span class="keyword">int</span>(a * <span class="built_in">pow</span>(<span class="number">10</span>, nCount)+<span class="number">0.5</span>)) / <span class="built_in">pow</span>(<span class="number">10</span>, nCount);</span><br><span class="line">	<span class="keyword">return</span> d;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/28/【算法】-002 小数四舍五入截断/" data-id="cjnrolo7l0003ql9ss0ty5e06" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/28/【算法】-000-一维多项式求值/" data-id="cjnroz8nf00026l9sp2qwbr0h" class="article-share-link">Share</a>
       
       
     </footer>
@@ -186,7 +186,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/" data-id="cjnrolo7j0002ql9skdhtdn99" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/" data-id="cjnroz8nk00046l9s8ovodvsi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -232,15 +232,7 @@
       <ul>
         
           <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-004 读写锁/【UE4源代码分析】-004 读写锁/">【UE4源代码分析】-004 读写锁</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-002 UE4中的配置文件/【UE4源代码分析】-002 UE4中的配置文件/">【UE4源代码分析】-002 UE4中的配置文件</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/">【UE4源代码分析】-003 临界区</a>
           </li>
         
           <li>
@@ -248,7 +240,15 @@
           </li>
         
           <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
+          </li>
+        
+          <li>
             <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-008 从GuardedMain函数开始/【UE4源代码分析】-008 从GuardedMain函数开始/">【UE4源代码分析】-008 从GuardedMain函数开始游戏循环</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-005 Editor的起点-Main函数/【UE4源代码分析】-005 Editor的起点-Main函数/">【UE4源代码分析】-005 Editor的起点-Main函数</a>
           </li>
         
       </ul>
