@@ -7,17 +7,17 @@
   
   <title>001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处">
+  <meta name="description" content="[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处理器定义中删除_WINDOWS,添加_CONSOLE;&amp;emsp;&amp;emsp; (2) 项目属">
 <meta property="og:type" content="article">
 <meta property="og:title" content="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16">
 <meta property="og:url" content="http://yoursite.com/2018/10/28/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处">
+<meta property="og:description" content="[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处理器定义中删除_WINDOWS,添加_CONSOLE;&amp;emsp;&amp;emsp; (2) 项目属">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-27T16:27:37.994Z">
+<meta property="og:updated_time" content="2018-10-27T16:31:16.512Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16">
-<meta name="twitter:description" content="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处">
+<meta name="twitter:description" content="[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处理器定义中删除_WINDOWS,添加_CONSOLE;&amp;emsp;&amp;emsp; (2) 项目属">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -86,7 +86,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16"><a href="#001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16" class="headerlink" title="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16"></a>001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16</h1><p>[TOC]</p>
+        <p>[TOC]</p>
 <h2 id="1、现象"><a href="#1、现象" class="headerlink" title="1、现象"></a>1、现象</h2><p>&emsp;&emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现<code>error LNK2001 无法解析的外部符号 _WinMain@16</code>错误，链接错误。</p>
 <h2 id="2、解决方法"><a href="#2、解决方法" class="headerlink" title="2、解决方法"></a>2、解决方法</h2><p>&emsp;&emsp; (1) 项目属性-&gt;C/C++-&gt;预处理器，预处理器定义中删除<code>_WINDOWS</code>,添加<code>_CONSOLE</code>;<br>&emsp;&emsp; (2) 项目属性-&gt;链接器-&gt;系统，子系统选项选择为<code>控制台 (/SUBSYSTEM:CONSOLE)</code>;</p>
 
@@ -160,6 +160,10 @@
         
           <li>
             <a href="/2018/10/28/【算法】-000-一维多项式求值/">【算法】-000 一维多项式求值</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/【算法】-002 小数四舍五入截断/">【算法】-002 小数四舍五入截断</a>
           </li>
         
           <li>

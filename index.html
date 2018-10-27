@@ -84,7 +84,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Ubuntu18-04笔记"><a href="#Ubuntu18-04笔记" class="headerlink" title="Ubuntu18.04笔记"></a>Ubuntu18.04笔记</h1><h2 id="1-将主目录下文件夹名称改成英文名"><a href="#1-将主目录下文件夹名称改成英文名" class="headerlink" title="1 将主目录下文件夹名称改成英文名"></a>1 将主目录下文件夹名称改成英文名</h2><p>&emsp;&emsp;首先修改现有主文件夹下各文件夹名称：</p>
+        <h2 id="1-将主目录下文件夹名称改成英文名"><a href="#1-将主目录下文件夹名称改成英文名" class="headerlink" title="1 将主目录下文件夹名称改成英文名"></a>1 将主目录下文件夹名称改成英文名</h2><p>&emsp;&emsp;首先修改现有主文件夹下各文件夹名称：</p>
 <p>&emsp;&emsp;Desktop、 Documents、 Download、 Music、 Pictures、 Public、 Templates、 Videos ……</p>
 <p>&emsp;&emsp;然后编辑配置文件：</p>
 <p><code>gedit ~/.config/user-dirs.dirs</code></p>
@@ -125,7 +125,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16"><a href="#001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16" class="headerlink" title="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16"></a>001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16</h1><p>[TOC]</p>
+        <p>[TOC]</p>
 <h2 id="1、现象"><a href="#1、现象" class="headerlink" title="1、现象"></a>1、现象</h2><p>&emsp;&emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现<code>error LNK2001 无法解析的外部符号 _WinMain@16</code>错误，链接错误。</p>
 <h2 id="2、解决方法"><a href="#2、解决方法" class="headerlink" title="2、解决方法"></a>2、解决方法</h2><p>&emsp;&emsp; (1) 项目属性-&gt;C/C++-&gt;预处理器，预处理器定义中删除<code>_WINDOWS</code>,添加<code>_CONSOLE</code>;<br>&emsp;&emsp; (2) 项目属性-&gt;链接器-&gt;系统，子系统选项选择为<code>控制台 (/SUBSYSTEM:CONSOLE)</code>;</p>
 
@@ -165,7 +165,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>[TOC]</p>
-<h2 id="1、一维多项式的定义"><a href="#1、一维多项式的定义" class="headerlink" title="1、一维多项式的定义"></a>1、一维多项式的定义</h2><p>&emsp;&emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$</p>
+<p>&emsp;&emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$</p>
 <p>&emsp;&emsp;一维多项式的求值就是求$p(x)$在$x$处的值。</p>
 <h2 id="2、普通解法"><a href="#2、普通解法" class="headerlink" title="2、普通解法"></a>2、普通解法</h2><p>&emsp;&emsp;普通解法是按照常规做法，一项一项的求值，分别计算$x^{n-1}$，在计算$a_{n-1}$与$x^{n-1}$的乘积，并将最后的结果相加，得到计算结果。</p>
 <p>&emsp;&emsp;这种做法需要的计算量如下：</p>
@@ -182,6 +182,45 @@
     </div>
     <footer class="article-footer">
       <a data-url="http://yoursite.com/2018/10/28/【算法】-000-一维多项式求值/" data-id="cjnrnt2l70002ze9slw0ar0ro" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-【算法】-002 小数四舍五入截断" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/28/【算法】-002 小数四舍五入截断/" class="article-date">
+  <time datetime="2018-10-27T16:24:35.000Z" itemprop="datePublished">2018-10-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/28/【算法】-002 小数四舍五入截断/">【算法】-002 小数四舍五入截断</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;实际应用中，由于采集设备的精度问题，虽然测量值在有效范围内，但可能数据尾部会处在一直跳变的过程中。为了将不稳定的数据位舍去，因此需要将测试数据进行带四舍五入的截断。</p>
+<p>[TOC]</p>
+<h2 id="1、-实现"><a href="#1、-实现" class="headerlink" title="1、 实现"></a>1、 实现</h2><p>&emsp;&emsp;将带小数的测试数据直接进行数据类型转换，使用C++编译器默认的截断规则进行小数截断。比如，要将1.123456保留5位小数，使用C++代码方法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">DecimalTruncation</span><span class="params">(<span class="keyword">float</span> a, <span class="keyword">int</span> nCount)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">float</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//先将数据放大10^nCount倍，将小数点右移nCount位，之后进行整数截断，为了确保四舍五入的进行，将放大后的数据+0.5，</span></span><br><span class="line">	<span class="comment">//截断之后再将结果缩小10^nCount倍，将小数点左移nCount位。</span></span><br><span class="line">	d = (<span class="keyword">int</span>(a * <span class="built_in">pow</span>(<span class="number">10</span>, nCount)+<span class="number">0.5</span>)) / <span class="built_in">pow</span>(<span class="number">10</span>, nCount);</span><br><span class="line">	<span class="keyword">return</span> d;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/28/【算法】-002 小数四舍五入截断/" data-id="cjnrnypl300005p9stqab6th5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -277,6 +316,10 @@
         
           <li>
             <a href="/2018/10/28/【算法】-000-一维多项式求值/">【算法】-000 一维多项式求值</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/【算法】-002 小数四舍五入截断/">【算法】-002 小数四舍五入截断</a>
           </li>
         
           <li>

@@ -7,17 +7,17 @@
   
   <title>【算法】-000 一维多项式求值 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="[TOC] 1、一维多项式的定义&amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解法是按照常规做法，一项一项的求值">
+  <meta name="description" content="[TOC] &amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解法是按照常规做法，一项一项的求值，分别计算$x^{n">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【算法】-000 一维多项式求值">
 <meta property="og:url" content="http://yoursite.com/2018/10/28/【算法】-000-一维多项式求值/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="[TOC] 1、一维多项式的定义&amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解法是按照常规做法，一项一项的求值">
+<meta property="og:description" content="[TOC] &amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解法是按照常规做法，一项一项的求值，分别计算$x^{n">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-27T16:27:12.039Z">
+<meta property="og:updated_time" content="2018-10-27T16:31:10.565Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【算法】-000 一维多项式求值">
-<meta name="twitter:description" content="[TOC] 1、一维多项式的定义&amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解法是按照常规做法，一项一项的求值">
+<meta name="twitter:description" content="[TOC] &amp;emsp;&amp;emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$ &amp;emsp;&amp;emsp;一维多项式的求值就是求$p(x)$在$x$处的值。 2、普通解法&amp;emsp;&amp;emsp;普通解法是按照常规做法，一项一项的求值，分别计算$x^{n">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -87,7 +87,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>[TOC]</p>
-<h2 id="1、一维多项式的定义"><a href="#1、一维多项式的定义" class="headerlink" title="1、一维多项式的定义"></a>1、一维多项式的定义</h2><p>&emsp;&emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$</p>
+<p>&emsp;&emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$</p>
 <p>&emsp;&emsp;一维多项式的求值就是求$p(x)$在$x$处的值。</p>
 <h2 id="2、普通解法"><a href="#2、普通解法" class="headerlink" title="2、普通解法"></a>2、普通解法</h2><p>&emsp;&emsp;普通解法是按照常规做法，一项一项的求值，分别计算$x^{n-1}$，在计算$a_{n-1}$与$x^{n-1}$的乘积，并将最后的结果相加，得到计算结果。</p>
 <p>&emsp;&emsp;这种做法需要的计算量如下：</p>
@@ -122,9 +122,9 @@
     </a>
   
   
-    <a href="/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/10/28/【算法】-002 小数四舍五入截断/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">【算法】-001 数据处理-均值、方差、协方差、相关系数</div>
+      <div class="article-nav-title">【算法】-002 小数四舍五入截断</div>
     </a>
   
 </nav>
@@ -170,6 +170,10 @@
         
           <li>
             <a href="/2018/10/28/【算法】-000-一维多项式求值/">【算法】-000 一维多项式求值</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/【算法】-002 小数四舍五入截断/">【算法】-002 小数四舍五入截断</a>
           </li>
         
           <li>
