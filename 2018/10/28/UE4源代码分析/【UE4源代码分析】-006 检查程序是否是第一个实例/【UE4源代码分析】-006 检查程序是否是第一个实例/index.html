@@ -15,8 +15,9 @@
 <meta property="og:description" content="&amp;emsp;&amp;emsp;本文主要结合在工作中遇到的需要保持在一台计算机上只允许一个程序实例运行的需求，结合在阅读UE4源代码的时候关于NamedMutex的一点思考，记录下如果检测程序是否是本计算机上运行的第一个实例的问题。 [TOC] 1、问题的由来&amp;emsp;&amp;emsp;最近在开发过程中，由于软件需要和计算机的数据采集卡硬件打交道，数据采集卡SDK在重复初始化的时候会初始化失败。虽然在初始化失">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-1.PNG">
+<meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-1.PNG">
 <meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-2.PNG">
-<meta property="og:updated_time" content="2018-10-27T16:50:10.955Z">
+<meta property="og:updated_time" content="2018-10-27T16:55:05.310Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【UE4源代码分析】-006 检查程序是否是第一个实例">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文主要结合在工作中遇到的需要保持在一台计算机上只允许一个程序实例运行的需求，结合在阅读UE4源代码的时候关于NamedMutex的一点思考，记录下如果检测程序是否是本计算机上运行的第一个实例的问题。 [TOC] 1、问题的由来&amp;emsp;&amp;emsp;最近在开发过程中，由于软件需要和计算机的数据采集卡硬件打交道，数据采集卡SDK在重复初始化的时候会初始化失败。虽然在初始化失">
@@ -121,7 +122,9 @@
 <li><p>窗口关闭时释放Mutex<br>&emsp;&emsp;由于命名Mutex是系统核心对象，如果程序退出时不关闭该对象，系统不会自动清理并关闭该对象，因此，需要在程序退出时手动关闭该对象。<br>&emsp;&emsp;我们可以选择在窗口关闭的时候关闭该对象。<br>&emsp;&emsp;为窗口添加WM_CLOSE消息响应函数，并在其中释放Mutex。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CIsFirstRunDlg::OnClose()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 在此添加消息处理程序代码和/或调用默认值</span></span><br><span class="line">	<span class="keyword">if</span> (g_hMutex)</span><br><span class="line">	&#123;</span><br><span class="line">		ReleaseMutex(g_hMutex);</span><br><span class="line">		g_hMutex = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	CDialogEx::OnClose();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>运行效果<br>&emsp;&emsp;程序第一次运行时效果图如下：<br><img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/IsFirstRun-1.PNG"><br>[第一次运行…(IsFirstRun-1)]<br>&emsp;&emsp;程序第二次运行时效果图如下：<br><img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/IsFirstRun-2.PNG"><br>&emsp;&emsp;如果第二次程序尝试启动时，第一次运行的程序已经处于最小化状态，尝试第二次运行程序会将第一次运行程序的主界面显示出来。</p>
+<li><p>运行效果<br>&emsp;&emsp;程序第一次运行时效果图如下：<br><img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/IsFirstRun-1.PNG"></p>
+<img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-1.PNG" title="IsFirstRun-1">
+<p>&emsp;&emsp;程序第二次运行时效果图如下：<br><img src="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/IsFirstRun-2.PNG"><br>&emsp;&emsp;如果第二次程序尝试启动时，第一次运行的程序已经处于最小化状态，尝试第二次运行程序会将第一次运行程序的主界面显示出来。</p>
 </li>
 </ul>
 <h2 id="4、总结"><a href="#4、总结" class="headerlink" title="4、总结"></a>4、总结</h2><p>&emsp;&emsp;检测程序是否是第一个运行实例或者是检测程序是第几个运行实例本质上是一个进程间通信的问题，只需要在程序启动的时候去检测特定位置的资源状态即可。<br>&emsp;&emsp;实际上，除了使用系统的命名核心对象之外，我们还可以采用诸如硬盘文件、系统注册表等手段记录程序运行次数，在程序启动时检测该值得出程序的运行次数。</p>
