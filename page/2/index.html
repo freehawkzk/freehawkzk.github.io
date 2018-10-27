@@ -5,19 +5,15 @@
   
 
   
-  <title>【算法】-001 数据处理-均值、方差、协方差、相关系数 | Hexo</title>
+  <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="&amp;emsp;&amp;emsp;最近在项目中需要对数据进行简单处理，要求计算数据的均值、方差、相关系数等数据关系。 [TOC] 1、 均值&amp;emsp;&amp;emsp;这里数据的均值只的是数据的算术均值(Arithmetic Mean),只所有数据之和再除以数据的个数，反应的是数据集中趋势的一个指标。 &amp;emsp;&amp;emsp;对于$n$个数据的数据集$N$,算数平均值计算公式如下：$$A_n = \frac{a">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【算法】-001 数据处理-均值、方差、协方差、相关系数">
-<meta property="og:url" content="http://yoursite.com/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;最近在项目中需要对数据进行简单处理，要求计算数据的均值、方差、相关系数等数据关系。 [TOC] 1、 均值&amp;emsp;&amp;emsp;这里数据的均值只的是数据的算术均值(Arithmetic Mean),只所有数据之和再除以数据的个数，反应的是数据集中趋势的一个指标。 &amp;emsp;&amp;emsp;对于$n$个数据的数据集$N$,算数平均值计算公式如下：$$A_n = \frac{a">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-27T16:25:18.294Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【算法】-001 数据处理-均值、方差、协方差、相关系数">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp;最近在项目中需要对数据进行简单处理，要求计算数据的均值、方差、相关系数等数据关系。 [TOC] 1、 均值&amp;emsp;&amp;emsp;这里数据的均值只的是数据的算术均值(Arithmetic Mean),只所有数据之和再除以数据的个数，反应的是数据集中趋势的一个指标。 &amp;emsp;&amp;emsp;对于$n$个数据的数据集$N$,算数平均值计算公式如下：$$A_n = \frac{a">
+<meta name="twitter:title" content="Hexo">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -64,7 +60,97 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-【算法】-001-数据处理-均值、方差、协方差、相关系数" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-【算法】-002 小数四舍五入截断" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/28/【算法】-002 小数四舍五入截断/" class="article-date">
+  <time datetime="2018-10-27T16:24:35.000Z" itemprop="datePublished">2018-10-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/28/【算法】-002 小数四舍五入截断/">【算法】-002 小数四舍五入截断</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;实际应用中，由于采集设备的精度问题，虽然测量值在有效范围内，但可能数据尾部会处在一直跳变的过程中。为了将不稳定的数据位舍去，因此需要将测试数据进行带四舍五入的截断。</p>
+<p>[TOC]</p>
+<h2 id="1、-实现"><a href="#1、-实现" class="headerlink" title="1、 实现"></a>1、 实现</h2><p>&emsp;&emsp;将带小数的测试数据直接进行数据类型转换，使用C++编译器默认的截断规则进行小数截断。比如，要将1.123456保留5位小数，使用C++代码方法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">DecimalTruncation</span><span class="params">(<span class="keyword">float</span> a, <span class="keyword">int</span> nCount)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">float</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//先将数据放大10^nCount倍，将小数点右移nCount位，之后进行整数截断，为了确保四舍五入的进行，将放大后的数据+0.5，</span></span><br><span class="line">	<span class="comment">//截断之后再将结果缩小10^nCount倍，将小数点左移nCount位。</span></span><br><span class="line">	d = (<span class="keyword">int</span>(a * <span class="built_in">pow</span>(<span class="number">10</span>, nCount)+<span class="number">0.5</span>)) / <span class="built_in">pow</span>(<span class="number">10</span>, nCount);</span><br><span class="line">	<span class="keyword">return</span> d;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/28/【算法】-002 小数四舍五入截断/" data-id="cjnro06fr0004809scpzoim6e" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-【算法】-000-一维多项式求值" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/28/【算法】-000-一维多项式求值/" class="article-date">
+  <time datetime="2018-10-27T16:24:35.000Z" itemprop="datePublished">2018-10-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/28/【算法】-000-一维多项式求值/">【算法】-000 一维多项式求值</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>[TOC]</p>
+<p>&emsp;&emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$</p>
+<p>&emsp;&emsp;一维多项式的求值就是求$p(x)$在$x$处的值。</p>
+<h2 id="2、普通解法"><a href="#2、普通解法" class="headerlink" title="2、普通解法"></a>2、普通解法</h2><p>&emsp;&emsp;普通解法是按照常规做法，一项一项的求值，分别计算$x^{n-1}$，在计算$a_{n-1}$与$x^{n-1}$的乘积，并将最后的结果相加，得到计算结果。</p>
+<p>&emsp;&emsp;这种做法需要的计算量如下：</p>
+<p>&emsp;&emsp;计算$x^2$需要1次乘法，$x^3$需要两次乘法，$x^4$需要3次乘法，再加上前面与系数的乘法，一共需要进行$$N=1+2+3+4+ \dots + (n-2)+(n-1)=\frac{n(n-1)}{2}$$次乘法，因此，其时间复杂度为$O(n^2)$，空间复杂度可以做到$O(1)$。</p>
+<h2 id="3、变形解法"><a href="#3、变形解法" class="headerlink" title="3、变形解法"></a>3、变形解法</h2><p>&emsp;&emsp;将一维多项式变形成$$p(x)=((\dots(a_{n-1}x+a_{n-2})x+a_{n-3})x+\dots+a_1)x+a_0$$</p>
+<p>&emsp;&emsp;可以看出，这一解法的乘法计算量并未减少，算法的时间复杂度仍然为$O(n^2)$，空间复杂度为$O(1)$。</p>
+<h2 id="4、空间换时间"><a href="#4、空间换时间" class="headerlink" title="4、空间换时间"></a>4、空间换时间</h2><p>&emsp;&emsp;对于一维多项式，过程中需要多次求解$x^k$，并且在$x^{k+1}=x^k\times x$,因此，可以在计算过程中将$x^k$结果保存下来，在下次求解更高次幂的时候可以使用。</p>
+<p>&emsp;&emsp;此时，计算$x^{n-1}$需要的乘法次数为$n-2$次，各项与其系数相乘共需进行$n-2$次乘法，因此，一共的乘法次数为$2n-2$次，所以时间复杂度为$O(n)$。但算法执行过程中需要使用空间对$x^{n-1}$的计算过程进行存储，共需存储$n-2$个计算结果，因此，空间复杂度为$O(n)$。</p>
+<p>&emsp;&emsp;由此可见，虽然算法的时间复杂度降低了，但同时其空间复杂度上升了，时间和空间需要进行平衡。需要根据算法的使用场景来选择算法。</p>
+<h2 id="5、多项式稀疏时的情况"><a href="#5、多项式稀疏时的情况" class="headerlink" title="5、多项式稀疏时的情况"></a>5、多项式稀疏时的情况</h2><p>&emsp;&emsp;这里的多项式稀疏是指一维多项式中，指数不连续，通常指指数值很大，但项数很少，例如$$p(x)=a_{100000}x^{100000}+a_3x^3+a_2x^2+a_1x^1+a_0$$</p>
+<p>&emsp;&emsp;可以看出，直接计算时，乘法次数为100000+3+2+1次，额外空间为1。但使用时间换空间算法时，乘法次数为100000+1+1，额外空间为100000。算法并未明显改善时间复杂度同时浪费了空间。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/28/【算法】-000-一维多项式求值/" data-id="cjnro06fp0002809smzk61thf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-【算法】-001-数据处理-均值、方差、协方差、相关系数" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/" class="article-date">
   <time datetime="2018-10-27T16:24:34.000Z" itemprop="datePublished">2018-10-28</time>
@@ -77,8 +163,8 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      【算法】-001 数据处理-均值、方差、协方差、相关系数
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/">【算法】-001 数据处理-均值、方差、协方差、相关系数</a>
     </h1>
   
 
@@ -106,23 +192,16 @@
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/2018/10/28/【算法】-000-一维多项式求值/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          【算法】-000 一维多项式求值
-        
-      </div>
-    </a>
-  
-  
-</nav>
+</article>
+
 
   
-</article>
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 </section>
         

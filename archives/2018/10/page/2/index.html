@@ -5,19 +5,15 @@
   
 
   
-  <title>001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16 | Hexo</title>
+  <title>Archives: 2018/10 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处理器定义中删除_WINDOWS,添加_CONSOLE;&amp;emsp;&amp;emsp; (2) 项目属">
-<meta property="og:type" content="article">
-<meta property="og:title" content="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16">
-<meta property="og:url" content="http://yoursite.com/2018/10/28/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/archives/2018/10/page/2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处理器定义中删除_WINDOWS,添加_CONSOLE;&amp;emsp;&amp;emsp; (2) 项目属">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-27T16:31:16.512Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16">
-<meta name="twitter:description" content="[TOC] 1、现象&amp;emsp;&amp;emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现error LNK2001 无法解析的外部符号 _WinMain@16错误，链接错误。 2、解决方法&amp;emsp;&amp;emsp; (1) 项目属性-&amp;gt;C/C++-&amp;gt;预处理器，预处理器定义中删除_WINDOWS,添加_CONSOLE;&amp;emsp;&amp;emsp; (2) 项目属">
+<meta name="twitter:title" content="Hexo">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -64,63 +60,83 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/28/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/" class="article-date">
-  <time datetime="2018-10-27T16:24:36.000Z" itemprop="datePublished">2018-10-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      001- VS2015 error LNK2001 无法解析的外部符号 _WinMain@16
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2018/10/28/【算法】-002 小数四舍五入截断/" class="archive-article-date">
+  <time datetime="2018-10-27T16:24:35.000Z" itemprop="datePublished">Oct 28</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/10/28/【算法】-002 小数四舍五入截断/">【算法】-002 小数四舍五入截断</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>[TOC]</p>
-<h2 id="1、现象"><a href="#1、现象" class="headerlink" title="1、现象"></a>1、现象</h2><p>&emsp;&emsp;使用VS2015新建控制台空项目，之后往项目中手动添加cpp文件，编译时出现<code>error LNK2001 无法解析的外部符号 _WinMain@16</code>错误，链接错误。</p>
-<h2 id="2、解决方法"><a href="#2、解决方法" class="headerlink" title="2、解决方法"></a>2、解决方法</h2><p>&emsp;&emsp; (1) 项目属性-&gt;C/C++-&gt;预处理器，预处理器定义中删除<code>_WINDOWS</code>,添加<code>_CONSOLE</code>;<br>&emsp;&emsp; (2) 项目属性-&gt;链接器-&gt;系统，子系统选项选择为<code>控制台 (/SUBSYSTEM:CONSOLE)</code>;</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/28/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/" data-id="cjnro06fj0000809s09rmuapy" class="article-share-link">Share</a>
-      
-      
-    </footer>
+    </header>
   </div>
+</article>
   
     
-<nav id="article-nav">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2018/10/28/【算法】-000-一维多项式求值/" class="archive-article-date">
+  <time datetime="2018-10-27T16:24:35.000Z" itemprop="datePublished">Oct 28</time>
+</a>
+      
   
-    <a href="/2018/10/28/Ubuntu-notes-md/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Ubuntu18.04笔记
-        
-      </div>
-    </a>
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/10/28/【算法】-000-一维多项式求值/">【算法】-000 一维多项式求值</a>
+    </h1>
   
-  
-    <a href="/2018/10/28/【算法】-002 小数四舍五入截断/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">【算法】-002 小数四舍五入截断</div>
-    </a>
-  
-</nav>
 
-  
+    </header>
+  </div>
 </article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/" class="archive-article-date">
+  <time datetime="2018-10-27T16:24:34.000Z" itemprop="datePublished">Oct 28</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/10/28/【算法】-001-数据处理-均值、方差、协方差、相关系数/">【算法】-001 数据处理-均值、方差、协方差、相关系数</a>
+    </h1>
+  
+
+    </header>
+  </div>
+</article>
+  
+  
+    </div></section>
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/archives/2018/10/">&laquo; Prev</a><a class="page-number" href="/archives/2018/10/">1</a><span class="page-number current">2</span>
+  </nav>
 
 </section>
         

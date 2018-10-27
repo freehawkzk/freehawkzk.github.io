@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>【UE4源代码分析】-006 检查程序是否是第一个实例 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;emsp;&amp;emsp;本文主要结合在工作中遇到的需要保持在一台计算机上只允许一个程序实例运行的需求，结合在阅读UE4源代码的时候关于NamedMutex的一点思考，记录下如果检测程序是否是本计算机上运行的第一个实例的问题。 [TOC] 1、问题的由来&amp;emsp;&amp;emsp;最近在开发过程中，由于软件需要和计算机的数据采集卡硬件打交道，数据采集卡SDK在重复初始化的时候会初始化失败。虽然在初始化失">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【UE4源代码分析】-006 检查程序是否是第一个实例">
+<meta property="og:url" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;本文主要结合在工作中遇到的需要保持在一台计算机上只允许一个程序实例运行的需求，结合在阅读UE4源代码的时候关于NamedMutex的一点思考，记录下如果检测程序是否是本计算机上运行的第一个实例的问题。 [TOC] 1、问题的由来&amp;emsp;&amp;emsp;最近在开发过程中，由于软件需要和计算机的数据采集卡硬件打交道，数据采集卡SDK在重复初始化的时候会初始化失败。虽然在初始化失">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-1.PNG">
+<meta property="og:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-2.PNG">
+<meta property="og:updated_time" content="2018-10-27T16:36:02.134Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【UE4源代码分析】-006 检查程序是否是第一个实例">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文主要结合在工作中遇到的需要保持在一台计算机上只允许一个程序实例运行的需求，结合在阅读UE4源代码的时候关于NamedMutex的一点思考，记录下如果检测程序是否是本计算机上运行的第一个实例的问题。 [TOC] 1、问题的由来&amp;emsp;&amp;emsp;最近在开发过程中，由于软件需要和计算机的数据采集卡硬件打交道，数据采集卡SDK在重复初始化的时候会初始化失败。虽然在初始化失">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006%20检查程序是否是第一个实例/【UE4源代码分析】-006%20检查程序是否是第一个实例/IsFirstRun-1.PNG">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/" class="article-date">
+  <time datetime="2018-10-27T16:34:35.000Z" itemprop="datePublished">2018-10-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【UE4源代码分析】-006 检查程序是否是第一个实例
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;本文主要结合在工作中遇到的需要保持在一台计算机上只允许一个程序实例运行的需求，结合在阅读UE4源代码的时候关于<code>NamedMutex</code>的一点思考，记录下如果检测程序是否是本计算机上运行的第一个实例的问题。</p>
+<p>[TOC]</p>
+<h2 id="1、问题的由来"><a href="#1、问题的由来" class="headerlink" title="1、问题的由来"></a>1、问题的由来</h2><p>&emsp;&emsp;最近在开发过程中，由于软件需要和计算机的数据采集卡硬件打交道，数据采集卡SDK在重复初始化的时候会初始化失败。虽然在初始化失败的时候回弹出窗口并退出程序，但在客户体验来说有点low。<br>&emsp;&emsp;由于我平时是网易云音乐的用户，在使用网易云音乐的时候发现，当在一台计算机上已经运行了一个客户端的情况下，第二次启动网易云音乐的请求会直接把第一个程序实例的主界面显示出来，既响应了用户的运行请求，又不会弹出警告框影响用户体验。<br>&emsp;&emsp;这两件事的内在都是程序开始运行之后，如何检测自己是不是第一个运行的该应用程序的实例。</p>
+<h2 id="2、UE4的启发"><a href="#2、UE4的启发" class="headerlink" title="2、UE4的启发"></a>2、UE4的启发</h2><p>&emsp;&emsp;在上一篇<strong>【UE4源代码分析】-005 Editor的起点-Main函数</strong>中，在分析UE4编辑器的启动过程中，发现<code>WinMain</code>函数在设置了windows环境之后，紧接着就进行的工作是<code>GIsFirstInstance = MakeNamedMutex( CmdLine )</code>。在<code>MakeNamedMutex</code>函数中，主要进行了以下操作：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">MakeNamedMutex</span><span class="params">( <span class="keyword">const</span> TCHAR* CmdLine )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">bool</span> bIsFirstInstance = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	TCHAR MutexName[MAX_SPRINTF] = TEXT( <span class="string">""</span> );</span><br><span class="line"></span><br><span class="line">	FCString::Strcpy( MutexName, MAX_SPRINTF, TEXT( <span class="string">"UnrealEngine4"</span> ) );</span><br><span class="line"></span><br><span class="line">	GNamedMutex = CreateMutex( <span class="literal">NULL</span>, <span class="literal">true</span>, MutexName );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>( GNamedMutex	&amp;&amp; GetLastError() != ERROR_ALREADY_EXISTS &amp;&amp; !FParse::Param( CmdLine, TEXT( <span class="string">"NEVERFIRST"</span> ) ) )</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// We're the first instance!</span></span><br><span class="line">		bIsFirstInstance = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// Still need to release it in this case, because it gave us a valid copy</span></span><br><span class="line">		ReleaseNamedMutex();</span><br><span class="line">		<span class="comment">// There is already another instance of the game running.</span></span><br><span class="line">		bIsFirstInstance = <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span>( bIsFirstInstance );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;程序的流程如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;start: 开始</span><br><span class="line">e=&gt;end: 结束</span><br><span class="line">InitVaribale=&gt;operation: 设置内部变量状态</span><br><span class="line">CreateMutex=&gt;operation: 创建命名Mutex</span><br><span class="line">SetReturnValueTrue=&gt;operation: 设置返回值状态True</span><br><span class="line">SetReturnValueFalse=&gt;operation: 设置返回值状态False</span><br><span class="line">ReleaseMutex=&gt;operation: 释放Mutex Handle</span><br><span class="line">cond1=&gt;condition: Handle是否有效</span><br><span class="line">cond2=&gt;condition: Mutex是否已经存在</span><br><span class="line">cond3=&gt;condition: 带NEVERFIRST参数</span><br><span class="line"></span><br><span class="line">st-&gt;InitVaribale-&gt;CreateMutex-&gt;cond1</span><br><span class="line">cond1(yes)-&gt;cond2</span><br><span class="line">cond1(no)-&gt;ReleaseMutex</span><br><span class="line">cond2(yes)-&gt;cond3</span><br><span class="line">cond2(no)-&gt;ReleaseMutex</span><br><span class="line">cond3(yes)-&gt;SetReturnValueTrue</span><br><span class="line">cond3(no)-&gt;ReleaseMutex</span><br><span class="line">ReleaseMutex-&gt;SetReturnValueFalse</span><br><span class="line">SetReturnValueFalse-&gt;e</span><br><span class="line">SetReturnValueTrue-&gt;e</span><br></pre></td></tr></table></figure></p>
+<p>图1 UE4启动过程CreateNamedMutex流程图</p>
+<p>&emsp;&emsp;<strong>Mutex的性质</strong></p>
+<ul>
+<li>Mutex是系统内核的对象，可以用于线程或进程之间的同步；</li>
+<li>Mutex是互斥体，同一时刻只有多个线程或进程中的一个拥有该对象；</li>
+<li>Mutex分为命名互斥体和未命名互斥体两类；</li>
+<li>未命名互斥体只能用于单个进程的多个线程之间同步资源；</li>
+<li>命名的互斥体可以用于不同进程之间同步资源。<br>&emsp;&emsp;从以上性质可以看出，当程序的第一个实例开始运行的时候，调用<code>CreateMutex</code>创建一个命名的互斥体，之后的程序实例视图调用<code>CreateMutex</code>创建命名互斥体的时候由于已经存在该名称的互斥体，所以<code>CreateMutex</code>调用会设置最近错误为<code>ERROR_ALREADY_EXISTS</code>，表示该互斥体已经存在。通过该错误即可检测程序是不是第一个运行的实例。<h2 id="3、实现"><a href="#3、实现" class="headerlink" title="3、实现"></a>3、实现</h2>&emsp;&emsp;本文使用命名Mutex+计数变量的形式来记录程序的运行次数。</li>
+<li>新建MFC对话框项目<br>&emsp;&emsp;建议带上最大化最小化按钮，方便演示类似网易云音乐的第二次运行直接弹出第一次运行窗口的功能。<br>&emsp;&emsp;本文中工程名为<em>IsFirstRun</em>，VS自动生成IsFirstRun.h,IsFirstRun.cpp,IsFirstRunDlg.h,IsFirstRunDlg.cpp等文件。</li>
+<li>定义全局资源<br>&emsp;&emsp;在IsFirstRunApp.cpp,定义全局变量：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HANDLE g_hMutex = <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">const</span> CString g_cstrMutexName = <span class="string">L"IsFirstRunMutex"</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&emsp;&emsp;其中<code>g_cstrMutexName</code>表示我们要命名的Mutex对象名称。<br>&emsp;&emsp;在窗口上放置一个static text控件，并将空间ID改为IDC_SHOW_MSG.</p>
+<ul>
+<li>创建命名Mutex<br>&emsp;&emsp;在<code>CIsFirstRunApp()</code>中添加代码：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//尝试创建命名Mutex对象</span></span><br><span class="line">g_hMutex = CreateMutex(<span class="literal">NULL</span>, FALSE, g_cstrMutexName);</span><br><span class="line"><span class="keyword">if</span> (g_hMutex &amp;&amp; ERROR_ALREADY_EXISTS == GetLastError())</span><br><span class="line">&#123;<span class="comment">//命名Mutex已经存在</span></span><br><span class="line">       <span class="comment">//通过程序名称查找窗口</span></span><br><span class="line">	CWnd* pWnd = CWnd::FindWindow(<span class="literal">NULL</span>, _T(<span class="string">"IsFirstRun"</span>));</span><br><span class="line">	<span class="comment">//向该窗口发送自定义消息</span></span><br><span class="line">       SendMessage(pWnd-&gt;GetSafeHwnd(), WM_USER + <span class="number">1001</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="comment">//此时仍然需要释放该Mutex HANDLE</span></span><br><span class="line">       ReleaseMutex(g_hMutex);</span><br><span class="line">       <span class="comment">//退出程序</span></span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&emsp;&emsp;之所以在<code>CIsFirstRunApp()</code>构造函数中进行命名Mutex的创建，是为了对原有程序实例产生尽量小的影响，实际上这个创建过程可以放到Dlg的OnInitDlg中进行。<br>&emsp;&emsp;此处创建失败的处理过程是向已经运行的程序实例发送了一个自定义消息WM_USER+1001。因此，需要添加对这个自定义消息的处理。</p>
+<ul>
+<li>自定义消息的处理<br>&emsp;&emsp;在IsFirstRunDlg.h中添加消息响应函数声明：<br><code>afx_msg LRESULT OnSencodRun(WPARAM, LPARAM);</code><br>并添加用于记录程序运行次数的成员变量：<code>int m_nRunTimes;</code>并初始化值为1.<br>在<code>BOOL CIsFirstRunDlg::OnInitDialog()</code>中设置显示信息的初始值：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CString <span class="title">str</span><span class="params">(<span class="string">L"本程序第1次运行！"</span>)</span></span>;</span><br><span class="line">GetDlgItem(IDC_SHOW_MSG)-&gt;SetWindowTextW(str);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&emsp;&emsp;在IsFirstRunDlg.cpp中的消息映射表中添加自定义消息的消息映射：<br><code>ON_MESSAGE(WM_USER+1001,&amp;CIsFirstRunDlg::OnSencodRun)</code><br>&emsp;&emsp;实现<code>CIsFirstRunDlg::OnSencodRun</code>函数：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">LRESULT CIsFirstRunDlg::OnSencodRun(WPARAM, LPARAM)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//运行次数累加</span></span><br><span class="line">	m_nRunTimes += <span class="number">1</span>;</span><br><span class="line">	CString temp;</span><br><span class="line">	temp.Format(<span class="string">L"本程序第%d次运行！"</span>, m_nRunTimes);</span><br><span class="line">	<span class="comment">//设置界面上程序运行次数提示</span></span><br><span class="line">    GetDlgItem(IDC_SHOW_MSG)-&gt;SetWindowTextW(temp);</span><br><span class="line">	<span class="comment">//显示主窗口</span></span><br><span class="line">    ShowWindow(SW_SHOWNORMAL);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>窗口关闭时释放Mutex<br>&emsp;&emsp;由于命名Mutex是系统核心对象，如果程序退出时不关闭该对象，系统不会自动清理并关闭该对象，因此，需要在程序退出时手动关闭该对象。<br>&emsp;&emsp;我们可以选择在窗口关闭的时候关闭该对象。<br>&emsp;&emsp;为窗口添加WM_CLOSE消息响应函数，并在其中释放Mutex。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CIsFirstRunDlg::OnClose()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 在此添加消息处理程序代码和/或调用默认值</span></span><br><span class="line">	<span class="keyword">if</span> (g_hMutex)</span><br><span class="line">	&#123;</span><br><span class="line">		ReleaseMutex(g_hMutex);</span><br><span class="line">		g_hMutex = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	CDialogEx::OnClose();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行效果<br>&emsp;&emsp;程序第一次运行时效果图如下：<br><img src="IsFirstRun-1.PNG"><br>&emsp;&emsp;程序第二次运行时效果图如下：<br><img src="IsFirstRun-2.PNG"><br>&emsp;&emsp;如果第二次程序尝试启动时，第一次运行的程序已经处于最小化状态，尝试第二次运行程序会将第一次运行程序的主界面显示出来。</p>
+</li>
+</ul>
+<h2 id="4、总结"><a href="#4、总结" class="headerlink" title="4、总结"></a>4、总结</h2><p>&emsp;&emsp;检测程序是否是第一个运行实例或者是检测程序是第几个运行实例本质上是一个进程间通信的问题，只需要在程序启动的时候去检测特定位置的资源状态即可。<br>&emsp;&emsp;实际上，除了使用系统的命名核心对象之外，我们还可以采用诸如硬盘文件、系统注册表等手段记录程序运行次数，在程序启动时检测该值得出程序的运行次数。</p>
+<p>PS：WIN10 + VS2015工程，<br>代码地址：<a href="https://github.com/freehawkzk/IsFirstRun.git" target="_blank" rel="noopener">https://github.com/freehawkzk/IsFirstRun.git</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/" data-id="cjnro06gu0009809s1i8wsru7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-002 UE4中的配置文件/【UE4源代码分析】-002 UE4中的配置文件/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【UE4源代码分析】-002 UE4中的配置文件</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/">【UE4源代码分析】-003 临界区</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-008 从GuardedMain函数开始/【UE4源代码分析】-008 从GuardedMain函数开始/">【UE4源代码分析】-008 从GuardedMain函数开始游戏循环</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/">【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/">【UE4源代码分析】-006 检查程序是否是第一个实例</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

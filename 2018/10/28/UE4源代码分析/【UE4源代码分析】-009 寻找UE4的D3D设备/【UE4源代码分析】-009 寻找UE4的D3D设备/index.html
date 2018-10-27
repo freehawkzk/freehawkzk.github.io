@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>【UE4源代码分析】-009 寻找UE4的D3D设备 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;emsp;&amp;emsp;UE4作为一款3D游戏引擎，当然也离不开显卡的支持。目前，主流的3D API主要包括DirectX、OpenGL、Vankul三种。其中，OpenGL和Vankul是支持跨平台的，而DirectX只能在windows平台上使用。UE4在windows平台上可以选择使用DX12或DX11等directX设备作为渲染设备。而D3D设备在使用之前是必须先创建的。&amp;emsp;&amp;em">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【UE4源代码分析】-009 寻找UE4的D3D设备">
+<meta property="og:url" content="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;UE4作为一款3D游戏引擎，当然也离不开显卡的支持。目前，主流的3D API主要包括DirectX、OpenGL、Vankul三种。其中，OpenGL和Vankul是支持跨平台的，而DirectX只能在windows平台上使用。UE4在windows平台上可以选择使用DX12或DX11等directX设备作为渲染设备。而D3D设备在使用之前是必须先创建的。&amp;emsp;&amp;em">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-27T16:37:09.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【UE4源代码分析】-009 寻找UE4的D3D设备">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;UE4作为一款3D游戏引擎，当然也离不开显卡的支持。目前，主流的3D API主要包括DirectX、OpenGL、Vankul三种。其中，OpenGL和Vankul是支持跨平台的，而DirectX只能在windows平台上使用。UE4在windows平台上可以选择使用DX12或DX11等directX设备作为渲染设备。而D3D设备在使用之前是必须先创建的。&amp;emsp;&amp;em">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/" class="article-date">
+  <time datetime="2018-10-27T16:34:35.000Z" itemprop="datePublished">2018-10-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【UE4源代码分析】-009 寻找UE4的D3D设备
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;UE4作为一款3D游戏引擎，当然也离不开显卡的支持。目前，主流的3D API主要包括DirectX、OpenGL、Vankul三种。其中，OpenGL和Vankul是支持跨平台的，而DirectX只能在windows平台上使用。UE4在windows平台上可以选择使用DX12或DX11等directX设备作为渲染设备。而D3D设备在使用之前是必须先创建的。<br>&emsp;&emsp;那么，今天让我们一起来探寻windows下使用DirectX作为渲染API时是在什么时候创建的D3D设备。</p>
+<p>[TOC]</p>
+<h2 id="1-创建过程"><a href="#1-创建过程" class="headerlink" title="1 创建过程"></a>1 创建过程</h2><p>&emsp;&emsp;在上一篇中，我们知道UE4启动之后经过了PreInit,init,tick,exit四个过程。那么，我们首先从PreInit开始寻找。<br>&emsp;&emsp;<code>EnginePreInit</code>函数实现在<code>Engine\Source\Runtime\Launch\Private</code>中进行实现，实现过程只是调用在<code>Engine\Source\Runtime\Launch\Private\LaunchEngineLoop.cpp</code>中实现的<code>FEngineLoop::PreInit</code>函数，由此可见，重点在<code>FEngineLoop::PreInit</code>函数。<br>&emsp;&emsp;我们查看<code>FEngineLoop::PreInit</code>的源代码，发现该函数是一个很长的函数，从934行一直到2401行，总行数1468行。在这个长长的函数中，我们需要寻找我们关心的内容。<br>&emsp;&emsp;在1780行，调用了<code>RHIInit</code>函数。这里，出现了RHI这个名词。RHI是Render Hardware Interface(渲染硬件接口)的意思。由于UE4的跨平台的需求，不同平台上需要使用不同的3D API来进行渲染。为了对上层程序员隐藏底层渲染的实现，UE4提出了RHI的概念，将底层渲染相关工作全部通过RHI来进行抽象，使上层程序员不用关系底层到底是用的是什么3D API，只需要关心实现的效果即可。<br>&emsp;&emsp;在<code>RHIInit</code>中，判断了<code>GDynamicRHI</code>指针的有效性，从变量命名来看，这是一个全部的DynamicRHI指针，极有可能是指向渲染设备的。因此，本指针内容的创建极有可能包含3D设备的创建过程。函数中进行了如下调用<code>GDynamicRHI = PlatformCreateDynamicRHI();</code>,可见，这是在创建GDynamicRHI的内容，咱们需要继续深入。<br>&emsp;&emsp;在<code>PlatformCreateDynamicRHI</code>中，经过一系列对平台所支持的API的判断以及本程序所选择的API的判断之后，最终来到了以下调用：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (DynamicRHIModule)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Create the dynamic RHI.</span></span><br><span class="line">	DynamicRHI = DynamicRHIModule-&gt;CreateRHI(RequestedFeatureLevel);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> DynamicRHI;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;创建了一个DynamicRHI对象并将指针返回给了GDynamicRHI指针。可见，我们需要重点关注CreateRHI接口。此时，<code>DynamicRHIModule</code>是一个windows D3D11 的RHI Module。因此，我们可以继续向下。<br>&emsp;&emsp;在<code>Engine\Source\Runtime\Windows\D3D11RHI\Private\Windows\WindowsD3D11Device.cpp</code>中，定义了该module的CreateRHI接口。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">TRefCountPtr&lt;IDXGIFactory1&gt; DXGIFactory1;</span><br><span class="line">	SafeCreateDXGIFactory(DXGIFactory1.GetInitReference());</span><br><span class="line">	check(DXGIFactory1);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> FD3D11DynamicRHI(DXGIFactory1,ChosenAdapter.MaxSupportedFeatureLevel,ChosenAdapter.AdapterIndex,ChosenDescription);</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里貌似就要达到目标了，可当我们进入<code>FD3D11DynamicRHI</code>的构造函数的时候，在里面却并没有发现熟悉的创建D3D11设备的过程。但，在<code>FD3D11DynamicRHI</code>类中，我们发现了一下两个成员函数<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** If it hasn't been initialized yet, initializes the D3D device. */</span></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">InitD3DDevice</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// FDynamicRHI interface.</span></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Init</span><span class="params">()</span> override</span>;</span><br></pre></td></tr></table></figure></p>
+<p>其中<code>Init</code>函数内部调用了<code>InitD3DDevice</code>函数。<code>InitD3DDevice</code>的实现如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> FD3D11DynamicRHI::InitD3DDevice()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// If we don't have a device yet, either because this is the first viewport, or the old device was removed, create a device.</span></span><br><span class="line">	<span class="keyword">if</span>(!Direct3DDevice)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// Determine the adapter and device type to use.</span></span><br><span class="line">		TRefCountPtr&lt;IDXGIAdapter&gt; Adapter;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// In Direct3D 11, if you are trying to create a hardware or a software device, set pAdapter != NULL which constrains the other inputs to be:</span></span><br><span class="line">		<span class="comment">//		DriverType must be D3D_DRIVER_TYPE_UNKNOWN </span></span><br><span class="line">		<span class="comment">//		Software must be NULL. </span></span><br><span class="line">		D3D_DRIVER_TYPE DriverType = D3D_DRIVER_TYPE_UNKNOWN;	</span><br><span class="line"></span><br><span class="line">		uint32 DeviceFlags = D3D11RHI_ShouldAllowAsyncResourceCreation() ? <span class="number">0</span> : D3D11_CREATE_DEVICE_SINGLETHREADED;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Use a debug device if specified on the command line.</span></span><br><span class="line">		<span class="keyword">const</span> <span class="keyword">bool</span> bWithD3DDebug = D3D11RHI_ShouldCreateWithD3DDebug();</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (bWithD3DDebug)</span><br><span class="line">		&#123;</span><br><span class="line">			DeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;</span><br><span class="line"></span><br><span class="line">			UE_LOG(LogD3D11RHI, Log, TEXT(<span class="string">"InitD3DDevice: -D3DDebug = %s"</span>), bWithD3DDebug ? TEXT(<span class="string">"on"</span>) : TEXT(<span class="string">"off"</span>));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		GTexturePoolSize = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		TRefCountPtr&lt;IDXGIAdapter&gt; EnumAdapter;</span><br><span class="line">        <span class="comment">//枚举显卡设备</span></span><br><span class="line">		<span class="keyword">if</span>(DXGIFactory1-&gt;EnumAdapters(ChosenAdapter,EnumAdapter.GetInitReference()) != DXGI_ERROR_NOT_FOUND)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (EnumAdapter)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">// 枚举成功</span></span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			check(!<span class="string">"Internal error, EnumAdapters() failed but before it worked"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//创建D3D11设备</span></span><br><span class="line">		<span class="keyword">if</span> (!bDeviceCreated)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// Creating the Direct3D device.</span></span><br><span class="line">			VERIFYD3D11RESULT(D3D11CreateDevice(</span><br><span class="line">				Adapter,</span><br><span class="line">				DriverType,</span><br><span class="line">				<span class="literal">NULL</span>,</span><br><span class="line">				DeviceFlags,</span><br><span class="line">				&amp;FeatureLevel,</span><br><span class="line">				<span class="number">1</span>,</span><br><span class="line">				D3D11_SDK_VERSION,</span><br><span class="line">				Direct3DDevice.GetInitReference(),</span><br><span class="line">				&amp;ActualFeatureLevel,</span><br><span class="line">				Direct3DDeviceIMContext.GetInitReference()</span><br><span class="line">			));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Set the RHI initialized flag.</span></span><br><span class="line">		GIsRHIInitialized = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从中可以看出，UE4中D3D11设备的创建时在<code>InitD3DDevice</code>函数中进行的，那是在什么时候调用的这个函数呢？<br>前面我们已经发现Init函数会调用它，那么<code>FD3D11DynamicRHI::Init</code>是在什么时候被调用呢？<br>&emsp;&emsp;我们回到<code>RHIInit</code>函数中，<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GDynamicRHI = PlatformCreateDynamicRHI();</span><br><span class="line"><span class="keyword">if</span> (GDynamicRHI)</span><br><span class="line">&#123;</span><br><span class="line">	GDynamicRHI-&gt;Init();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>发现通过<code>PlatformCreateDynamicRHI</code>函数创建了<code>FD3D11DynamicRHI</code>对象之后会紧接着就进行该RHI对象的Init操作，从而调用<code>InitD3DDevice</code>函数完成第一个D3D11设备的创建。<br>&emsp;&emsp;至此，D3D11设备就被创建出来并用于相关资源的初始化工作，待渲染进行开始之后就可以用于渲染。</p>
+<h2 id="2-RHI"><a href="#2-RHI" class="headerlink" title="2 RHI"></a>2 RHI</h2><p>&emsp;&emsp;RHI: Render hardware interface 渲染硬件层接口， 本人理解RHI是一套硬件无关，平台无关的图形渲染API.<br>&emsp;&emsp;它是如何做到与平台无关，与硬件无关的呢？<br>&emsp;&emsp;每个RHI接口都对应着多个图形API的实现版本. 对于每个RHI接口，其实都有针对DX11，DX12，OpenGL等版本的实现。对于不同平台，引擎初始化的时候就已经确定要用哪一套图形API了。 之后，调用的RHI其实就是对应初始化时候确定用的那套图形API实现的版本.<br>&emsp;&emsp;比如RHIDrawIndexedPrimitive接口，对于DX,OPENGL，其实都实现了RHIDrawIndexedPrimitive接口。<br>&emsp;&emsp;当引擎初始化的时候，判断是在windows平台上的，并决定使用DX11。之后，当调用RHIDrawIndexedPrimitive接口时，其实调用的是DX11版本的RHIDrawIndexedPrimitive。<br>&emsp;&emsp;对于RHI使用者而已，不需要关心是调用了哪套图形API，反正能正确运行，从而造成跨平台的假象；而从开发角度而言，RHI并不是平台无关的，它需要开发人员呕心沥血地开发和维护，以保证RHI在不同平台下运行结果都一样。<br>&emsp;&emsp;DynamicRHI.h里 FDynamicRHI， IRHIComputeContext两个虚基类里定义了所有的RHI接口。<br>实现RHI接口的子类有：</p>
+<ol>
+<li>class D3D11RHI_API FD3D11DynamicRHI : public FDynamicRHI, public IRHICommandContext</li>
+<li>class FD3D12DynamicRHI : public FDynamicRHI</li>
+<li>class OPENGLDRV_API FOpenGLDynamicRHI : public FDynamicRHI, public IRHICommandContext<br>Vulkan： 新一代跨平台，充分利用多核多线程的图形API</li>
+<li>class FVulkanDynamicRHI : public FDynamicRHI<br>Metal：苹果系统的图形API             </li>
+<li>class FMetalDynamicRHI : public FDynamicRHI, public FMetalRHICommandContext<h2 id="3-结论"><a href="#3-结论" class="headerlink" title="3 结论"></a>3 结论</h2>&emsp;&emsp;<strong>UE4在执行<code>FEngineLoop::PreInit</code>时，完成D3D设备的创建工作。</strong></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/" data-id="cjnro06gw000b809sqhw2d5vp" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-008 从GuardedMain函数开始/【UE4源代码分析】-008 从GuardedMain函数开始/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【UE4源代码分析】-008 从GuardedMain函数开始游戏循环
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-003 临界区/【UE4源代码分析】-003 临界区/">【UE4源代码分析】-003 临界区</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-008 从GuardedMain函数开始/【UE4源代码分析】-008 从GuardedMain函数开始/">【UE4源代码分析】-008 从GuardedMain函数开始游戏循环</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-009 寻找UE4的D3D设备/【UE4源代码分析】-009 寻找UE4的D3D设备/">【UE4源代码分析】-009 寻找UE4的D3D设备</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作/">【UE4源代码分析】-007 仿UE4使用ADO进行数据库操作</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/28/UE4源代码分析/【UE4源代码分析】-006 检查程序是否是第一个实例/【UE4源代码分析】-006 检查程序是否是第一个实例/">【UE4源代码分析】-006 检查程序是否是第一个实例</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
