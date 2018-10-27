@@ -62,6 +62,45 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-002-一维多项式求值" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/27/002-一维多项式求值/" class="article-date">
+  <time datetime="2018-10-27T15:45:33.572Z" itemprop="datePublished">2018-10-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="【算法】-000-一维多项式求值"><a href="#【算法】-000-一维多项式求值" class="headerlink" title="【算法】-000 一维多项式求值"></a>【算法】-000 一维多项式求值</h1><p>[TOC]</p>
+<h2 id="1、一维多项式的定义"><a href="#1、一维多项式的定义" class="headerlink" title="1、一维多项式的定义"></a>1、一维多项式的定义</h2><p>&emsp;&emsp;一维多项式是指如下所示的一元多项式：$$p(x)=a_{n-1}x^{n-1}+a_{n-2}x^{n-2}+a_{n-3}x^{n-3}+ \dots + a_2x^2+a_1x+a_0$$</p>
+<p>&emsp;&emsp;一维多项式的求值就是求$p(x)$在$x$处的值。</p>
+<h2 id="2、普通解法"><a href="#2、普通解法" class="headerlink" title="2、普通解法"></a>2、普通解法</h2><p>&emsp;&emsp;普通解法是按照常规做法，一项一项的求值，分别计算$x^{n-1}$，在计算$a_{n-1}$与$x^{n-1}$的乘积，并将最后的结果相加，得到计算结果。</p>
+<p>&emsp;&emsp;这种做法需要的计算量如下：</p>
+<p>&emsp;&emsp;计算$x^2$需要1次乘法，$x^3$需要两次乘法，$x^4$需要3次乘法，再加上前面与系数的乘法，一共需要进行$$N=1+2+3+4+ \dots + (n-2)+(n-1)=\frac{n(n-1)}{2}$$次乘法，因此，其时间复杂度为$O(n^2)$，空间复杂度可以做到$O(1)$。</p>
+<h2 id="3、变形解法"><a href="#3、变形解法" class="headerlink" title="3、变形解法"></a>3、变形解法</h2><p>&emsp;&emsp;将一维多项式变形成$$p(x)=((\dots(a_{n-1}x+a_{n-2})x+a_{n-3})x+\dots+a_1)x+a_0$$</p>
+<p>&emsp;&emsp;可以看出，这一解法的乘法计算量并未减少，算法的时间复杂度仍然为$O(n^2)$，空间复杂度为$O(1)$。</p>
+<h2 id="4、空间换时间"><a href="#4、空间换时间" class="headerlink" title="4、空间换时间"></a>4、空间换时间</h2><p>&emsp;&emsp;对于一维多项式，过程中需要多次求解$x^k$，并且在$x^{k+1}=x^k\times x$,因此，可以在计算过程中将$x^k$结果保存下来，在下次求解更高次幂的时候可以使用。</p>
+<p>&emsp;&emsp;此时，计算$x^{n-1}$需要的乘法次数为$n-2$次，各项与其系数相乘共需进行$n-2$次乘法，因此，一共的乘法次数为$2n-2$次，所以时间复杂度为$O(n)$。但算法执行过程中需要使用空间对$x^{n-1}$的计算过程进行存储，共需存储$n-2$个计算结果，因此，空间复杂度为$O(n)$。</p>
+<p>&emsp;&emsp;由此可见，虽然算法的时间复杂度降低了，但同时其空间复杂度上升了，时间和空间需要进行平衡。需要根据算法的使用场景来选择算法。</p>
+<h2 id="5、多项式稀疏时的情况"><a href="#5、多项式稀疏时的情况" class="headerlink" title="5、多项式稀疏时的情况"></a>5、多项式稀疏时的情况</h2><p>&emsp;&emsp;这里的多项式稀疏是指一维多项式中，指数不连续，通常指指数值很大，但项数很少，例如$$p(x)=a_{100000}x^{100000}+a_3x^3+a_2x^2+a_1x^1+a_0$$</p>
+<p>&emsp;&emsp;可以看出，直接计算时，乘法次数为100000+3+2+1次，额外空间为1。但使用时间换空间算法时，乘法次数为100000+1+1，额外空间为100000。算法并未明显改善时间复杂度同时浪费了空间。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/27/002-一维多项式求值/" data-id="cjnrmb1um0002979sqcag2v4u" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/10/27/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/" class="article-date">
@@ -81,7 +120,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/27/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/" data-id="cjnrm35q600010a9snlfh4ccy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/27/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/" data-id="cjnrmb1uk0001979swxd2yd85" class="article-share-link">Share</a>
       
       
     </footer>
@@ -110,7 +149,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/27/000-Outlook发送邮件后在发件箱出现两次/" data-id="cjnrm35q100000a9s5sihka10" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/27/000-Outlook发送邮件后在发件箱出现两次/" data-id="cjnrmb1uf0000979slsczbvzw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -142,7 +181,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/27/Ubuntu-notes-md/" data-id="cjnrm35q900020a9stgu255a0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/27/Ubuntu-notes-md/" data-id="cjnrmb1un0003979ssrtdre1y" class="article-share-link">Share</a>
       
       
     </footer>
@@ -187,7 +226,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/27/hello-world/" data-id="cjnrm35qb00030a9s4yzxrbbz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/27/hello-world/" data-id="cjnrmb1up0004979sfm6exkxa" class="article-share-link">Share</a>
       
       
     </footer>
@@ -226,6 +265,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/10/27/002-一维多项式求值/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2018/10/27/001-VS2015-error-LNK2001-无法解析的外部符号-WinMain-16/">(no title)</a>
