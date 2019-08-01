@@ -162,12 +162,12 @@ $$
         1&0&0&t_{1} \\\\
         0&1&0&t_{2} \\\\
         0&0&1&t_{3} \\\\
-        -R_k&-G_k&-B_k&t_{4} 
+        -R_k&-G_k&-B_k&t_{4}
     \end{bmatrix}=[R_o,G_o,B_o,\alpha_o]\begin{bmatrix}
         1&0&0&t_{1} \\\\
         0&1&0&t_{2} \\\\
         0&0&1&t_{3} \\\\
-        -R_k&-G_k&-B_k&t_{4} 
+        -R_k&-G_k&-B_k&t_{4}
     \end{bmatrix}
 $$
 $$
@@ -175,7 +175,7 @@ $$
         1&0&0&t_{1} \\\\
         0&1&0&t_{2} \\\\
         0&0&1&t_{3} \\\\
-        -R_k&-G_k&-B_k&t_{4} 
+        -R_k&-G_k&-B_k&t_{4}
     \end{bmatrix}=[R_o-R_k\alpha_o,G_o-G_k\alpha_o,B_o-B_k\alpha_o,T]
 $$
 &emsp;&emsp;其中$T=R_ot_1+G_ot_2+B_ot_3+\alpha_ot_4$。由于
@@ -205,20 +205,20 @@ C_k&=&[R_k,G_k,B_k,1]
 \end{aligned} \tag{28}
 $$
 $$
-\therefore 
+\therefore
 \begin{aligned}
 \alpha_ot_4&=&T-(R_{\Delta}+\alpha_oR_k)t_1-(G_{\Delta}+\alpha_oG_k)t_2-(B_{\Delta}+\alpha_oB_k)t_3 \\\\
 \alpha_o(R_kt_1+G_kt_2+B_kt_3+t_4)&=&T-(R_{\Delta}t_1+G_{\Delta}t_2+B_{\Delta}t_3)
 \end{aligned} \tag{29}
 $$
 $$
-\therefore 
+\therefore
 \begin{aligned}
-\alpha_o\overline{t}C_k&=&T-(R_{\Delta}t_1+G_{\Delta}t_2+B_{\Delta}t_3) 
+\alpha_o\overline{t}C_k&=&T-(R_{\Delta}t_1+G_{\Delta}t_2+B_{\Delta}t_3)
 \end{aligned} \tag{30}
 $$
 $$
-\therefore 
+\therefore
 \begin{aligned}
 \alpha_o&=&\frac{T-(R_{\Delta}t_1+G_{\Delta}t_2+B_{\Delta}t_3)}{\overline{t}C_k}\\\\
  &=&\frac{T-\overline{t}C_{\Delta}}{\overline{t}C_k} \\\\
