@@ -1,6 +1,7 @@
 # 【图像处理】 -040 Dlib 深度人脸检测
 
-@[toc]
+[toc]
+
 ## 1 简介
 
 &emsp;&emsp;Dlib中实现的深度人脸检测是基于MMOD（Maximum-Margin Object Detector(MMOD))，CNN结构。
