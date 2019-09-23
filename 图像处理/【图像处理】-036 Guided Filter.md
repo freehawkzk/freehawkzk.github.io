@@ -1,6 +1,6 @@
 # 【图像处理】 -036 Guided Image Filter
 
-[toc]
+[TOC]
 
 ## 1 引出
 
@@ -95,3 +95,5 @@ mean_b=fmean(b)
 ## 3 opencv中的实现
 
 &emsp;&emsp;在opencv中又自带的guidedFilter函数，不过是在ximgproc模块中，这个模块默认是不安装的，需要自己编译contrib包来使用。
+
+​	导向滤波的效果在抠像时的效果还是很好的。
